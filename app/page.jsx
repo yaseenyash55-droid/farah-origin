@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Phone, Instagram, MapPin, Heart, Sparkles } from 'lucide-react';
+import { Mail, Phone, Globe, MapPin, Heart, Sparkles } from 'lucide-react';
 
 export default function FarahOriginBoutique() {
   return (
@@ -132,7 +132,7 @@ export default function FarahOriginBoutique() {
                 rel="noreferrer"
                 className="w-full md:w-auto flex items-center justify-center gap-3 bg-white px-6 py-3 rounded-xl border border-[#EAD0CB] hover:shadow-md transition text-[#4A3E3D]"
               >
-                <Instagram className="w-5 h-5 text-[#E1306C]" />
+                <Globe className="w-5 h-5 text-[#E1306C]" />
                 <span className="font-medium tracking-wide">@farah_origin</span>
               </a>
 

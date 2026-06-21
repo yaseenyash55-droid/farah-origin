@@ -3,12 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "vite --open",
-    "dev": "vite --open",
-    "build": "vite build",
+    "start": "next start",
+    "dev": "next dev",
+    "build": "next build",
     "lint": "eslint .",
-    "preview": "vite preview"
-}
+    "preview": "next start"
   },
   "dependencies": {
     "lucide-react": "^1.21.0",
