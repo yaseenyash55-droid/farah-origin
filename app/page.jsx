@@ -1,197 +1,281 @@
-import React from 'react';
-import { Phone, MapPin, Heart, Sparkles, ShoppingBag } from 'lucide-react';
-// Importing beautiful premium fonts directly through Next.js
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { Phone, MapPin, Heart, Sparkles, ShoppingBag, Sun, Moon, ArrowRight, CheckCircle } from 'lucide-react';
 import { Playfair_Display, Great_Vibes, Plus_Jakarta_Sans } from 'next/font/google';
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '600', '700'] });
 const greatVibes = Great_Vibes({ subsets: ['latin'], weight: ['400'] });
 const jakarta = Plus_Jakarta_Sans({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
 
-export default function FarahOriginPremiumBoutique() {
-  return (
-    <div className={`${jakarta.className} min-h-screen bg-[#FFF8F6] text-[#4A3B3A] antialiased relative overflow-hidden pb-12`}>
-      
-      {/* Soft, premium ambient glow blobs in the background */}
-      <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[#FCEAE6] blur-[120px] pointer-events-none opacity-70" />
-      <div className="absolute bottom-[10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[#FBE3DE] blur-[100px] pointer-events-none opacity-60" />
+export default function FarahOriginFullWebsite() {
+  const [darkMode, setDarkMode] = useState(false);
 
-      {/* Elegant Floating Header Banner */}
-      <div className="w-full bg-[#FCECE8] py-3 text-center text-xs tracking-[0.2em] uppercase font-semibold flex items-center justify-center gap-2 border-b border-[#F3D1C9] text-[#A67C74]">
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
+
+  return (
+    <div className={`${jakarta.className} min-h-screen transition-colors duration-500 antialiased relative overflow-x-hidden
+      ${darkMode ? 'bg-[#1E1514] text-[#F3EBEA]' : 'bg-[#FFF8F6] text-[#4A3B3A]'}`}
+    >
+      {/* Decorative Background Glow Elements */}
+      <div className={`absolute top-0 left-[-10%] w-[60vw] h-[60vw] rounded-full blur-[140px] pointer-events-none opacity-60 transition-colors duration-500
+        ${darkMode ? 'bg-[#3D2522]' : 'bg-[#FCEAE6]'}`} 
+      />
+      <div className={`absolute top-[40%] right-[-10%] w-[50vw] h-[50vw] rounded-full blur-[120px] pointer-events-none opacity-50 transition-colors duration-500
+        ${darkMode ? 'bg-[#3A2220]' : 'bg-[#FBE3DE]'}`} 
+      />
+
+      {/* 1. TOP UTILITY BANNER */}
+      <div className={`w-full py-2.5 text-center text-xs tracking-[0.2em] uppercase font-semibold flex items-center justify-center gap-2 border-b transition-colors duration-500
+        ${darkMode ? 'bg-[#2D1A18] border-[#442B28] text-[#D3A297]' : 'bg-[#FCECE8] border-[#F3D1C9] text-[#A67C74]'}`}
+      >
         <Sparkles className="w-3.5 h-3.5 text-[#E27D86] animate-pulse" />
-        Handmade with Love & Care
+        Handmade with Love & Care — Shipping Across India
         <Sparkles className="w-3.5 h-3.5 text-[#E27D86] animate-pulse" />
       </div>
 
-      {/* Main Content Container */}
-      <main className="max-w-5xl mx-auto px-4 py-8 md:py-16 relative z-10">
-        
-        {/* Main Poster-Style Card Frame */}
-        <div className="bg-white/80 backdrop-blur-md rounded-[45px] shadow-[0_20px_50px_rgba(243,225,220,0.7)] p-5 md:p-12 border border-[#F7E4E0] relative">
+      {/* 2. NAVIGATION BAR */}
+      <nav className={`sticky top-0 z-50 backdrop-blur-md border-b transition-all duration-300
+        ${darkMode ? 'bg-[#1E1514]/80 border-[#3D2927]' : 'bg-[#FFF8F6]/80 border-[#F7E4E0]'}`}
+      >
+        <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+          <div className={`${greatVibes.className} text-3xl md:text-4xl text-[#E27D86] font-bold cursor-pointer`}>
+            Farah Origin
+          </div>
           
-          {/* Aesthetic Inner Border Box */}
-          <div className="border-2 border-[#F5D5CE] rounded-[36px] p-6 md:p-12 bg-white/50 relative">
-            
-            {/* Top Minimal Decoration */}
-            <div className="text-center mb-4">
-              <span className={`${playfair.className} italic text-xl md:text-2xl text-[#C98E82] tracking-wide block`}>
-                ✨ Beautifully Handcrafted ✨
-              </span>
-              <div className="text-[#F19CA7] text-xl mt-2 animate-bounce">♥</div>
-            </div>
-
-            {/* Main Typographic Titles */}
-            <h1 className={`${playfair.className} text-center text-5xl md:text-7xl font-bold tracking-tight text-[#2D1F1E] mb-2`}>
-              Customized
-            </h1>
-            
-            <h2 className={`${playfair.className} text-center text-4xl md:text-6xl text-[#E27D86] font-semibold tracking-wide mb-6`}>
-              Crochet <span className="font-sans text-2xl md:text-3xl text-[#C98E82]">&</span> Henna
-            </h2>
-
-            {/* Signature Creator Brand */}
-            <div className="flex justify-center items-center gap-3 mb-10">
-              <span className="text-sm uppercase tracking-[0.15em] text-[#9C8481] font-medium">by</span>
-              <span className={`${greatVibes.className} text-5xl md:text-7xl text-[#2D1F1E] drop-shadow-sm`}>
-                Farah Origin
-              </span>
-            </div>
-
-            {/* Premium Pill Badges */}
-            <div className="flex flex-wrap justify-center gap-4 mb-14">
-              <div className="flex items-center gap-2 bg-[#FFF2F0] px-6 py-3 rounded-full border border-[#FAD2CB] text-sm font-semibold tracking-wide text-[#5C4644] shadow-sm">
-                <Heart className="w-4 h-4 text-[#E27D86] fill-[#E27D86]" /> Handmade Crochet
-              </div>
-              <div className="flex items-center gap-2 bg-[#FFF2F0] px-6 py-3 rounded-full border border-[#FAD2CB] text-sm font-semibold tracking-wide text-[#5C4644] shadow-sm">
-                <Heart className="w-4 h-4 text-[#E27D86] fill-[#E27D86]" /> Mehandi Artistry
-              </div>
-            </div>
-
-            {/* Interactive Image Showcase Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 my-14">
-              
-              {/* Product Card 1 */}
-              <div className="group bg-white p-4 rounded-3xl shadow-md border border-[#F5E6E3] transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
-                <div className="aspect-[4/5] bg-[#FDF7F5] rounded-2xl overflow-hidden relative flex flex-col items-center justify-center p-6 border border-dashed border-[#EAD0CB]">
-                  {/* Subtle decorative background icon */}
-                  <ShoppingBag className="w-12 h-12 text-[#F2D1CA] mb-3 group-hover:scale-110 transition-transform" />
-                  <p className={`${playfair.className} text-xl font-bold text-[#4A3B3A] text-center`}>Crochet Gifts & Deco</p>
-                  <p className="text-xs text-[#A38E8B] mt-2 text-center">Custom orders made with soft yarn</p>
-                </div>
-              </div>
-              
-              {/* Product Card 2 (Featured center) */}
-              <div className="group bg-white p-4 rounded-3xl shadow-xl border-2 border-[#F19CA7] transition-all duration-300 hover:shadow-2xl md:-translate-y-3 hover:-translate-y-5">
-                <div className="absolute top-2 right-2 bg-[#E27D86] text-white text-[10px] uppercase tracking-widest px-3 py-1 rounded-full font-bold">Featured</div>
-                <div className="aspect-[4/5] bg-[#FFF2F0] rounded-2xl overflow-hidden relative flex flex-col items-center justify-center p-6 border border-dashed border-[#FAD2CB]">
-                  <Sparkles className="w-12 h-12 text-[#E27D86] mb-3 group-hover:rotate-12 transition-transform" />
-                  <p className={`${playfair.className} text-2xl font-bold text-[#2D1F1E] text-center`}>Bridal Mehandi</p>
-                  <p className="text-xs text-[#A38E8B] mt-2 text-center">Intricate custom traditional designs</p>
-                </div>
-              </div>
-
-              {/* Product Card 3 */}
-              <div className="group bg-white p-4 rounded-3xl shadow-md border border-[#F5E6E3] transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
-                <div className="aspect-[4/5] bg-[#FDF7F5] rounded-2xl overflow-hidden relative flex flex-col items-center justify-center p-6 border border-dashed border-[#EAD0CB]">
-                  <Heart className="w-12 h-12 text-[#F2D1CA] mb-3 group-hover:scale-110 transition-transform" />
-                  <p className={`${playfair.className} text-xl font-bold text-[#4A3B3A] text-center`}>Woolen Bouquets</p>
-                  <p className="text-xs text-[#A38E8B] mt-2 text-center">Flowers that bloom forever</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Aesthetic Poster Highlight Badges */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center border-t border-dashed border-[#EAD0CB] pt-12">
-              
-              <div className="text-center p-6 rounded-2xl border border-[#FCEBE7] bg-[#FFFDFD] shadow-sm">
-                <p className={`${playfair.className} text-sm italic text-[#8A716E] leading-relaxed`}>
-                  "Made just for you, to make every single moment <span className="text-[#E27D86] font-bold not-italic">special</span>"
-                </p>
-              </div>
-
-              <div className="bg-[#E27D86] text-white text-center p-6 rounded-2xl shadow-lg transform rotate-[-1deg] transition-transform hover:rotate-0 duration-300">
-                <p className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-90 mb-1">Perfect For</p>
-                <p className={`${playfair.className} text-2xl font-semibold`}>Birthdays & Events</p>
-                <div className="text-white text-sm mt-2">♥</div>
-              </div>
-
-              <div className="text-center p-6 rounded-full border-2 border-dashed border-[#F2D1CA] aspect-square flex flex-col justify-center max-w-[150px] mx-auto bg-white shadow-inner">
-                <span className={`${playfair.className} text-base text-[#2D1F1E] font-bold block`}>Mehandi</span>
-                <span className="text-[#D3A297] font-serif my-0.5">&</span>
-                <span className={`${playfair.className} text-base text-[#2D1F1E] font-bold block`}>Woolen</span>
-              </div>
-
-            </div>
-
+          <div className="hidden md:flex items-center gap-8 text-sm font-semibold tracking-wide">
+            <a href="#home" className="hover:text-[#E27D86] transition-colors">Home</a>
+            <a href="#about" className="hover:text-[#E27D86] transition-colors">About</a>
+            <a href="#gallery" className="hover:text-[#E27D86] transition-colors">Gallery</a>
+            <a href="#contact" className="hover:text-[#E27D86] transition-colors">Order Now</a>
           </div>
 
-          {/* Premium Contact & Action Grid */}
-          <div className="mt-12 bg-gradient-to-br from-[#FDF5F3] to-[#FCEBE7] rounded-[32px] p-6 md:p-10 border border-[#F3D1C9]">
-            <h3 className={`${playfair.className} text-center text-2xl md:text-3xl text-[#2D1F1E] font-bold mb-8`}>
-              Place an Order & Enquiries
-            </h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              
-              {/* WhatsApp Option */}
-              <a 
-                href="https://wa.me/918438440625" 
-                target="_blank" 
-                rel="noreferrer"
-                className="flex items-center justify-center gap-3 bg-white px-6 py-4 rounded-2xl border border-[#EAD0CB] hover:border-[#25D366] hover:shadow-md transition-all duration-300 text-[#4A3B3A] group"
-              >
-                <Phone className="w-5 h-5 text-[#25D366] group-hover:scale-110 transition-transform" />
-                <span className="font-bold tracking-wide">8438440625</span>
-              </a>
+          <div className="flex items-center gap-4">
+            {/* Dark Mode Toggle Switch */}
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className={`p-2.5 rounded-full border transition-all duration-300 hover:scale-105 active:scale-95
+                ${darkMode ? 'bg-white/10 border-white/20 text-[#FFF2F0]' : 'bg-black/5 border-black/10 text-[#3A2A29]'}`}
+            >
+              {darkMode ? <Sun className="w-4 h-4 text-[#FCDAD5]" /> : <Moon className="w-4 h-4 text-[#5C4644]" />}
+            </button>
+            <a href="#contact" className="bg-[#E27D86] hover:bg-[#D16C75] text-white text-xs uppercase tracking-widest font-bold px-5 py-3 rounded-xl shadow-md transition-all">
+              Book Custom Art
+            </a>
+          </div>
+        </div>
+      </nav>
 
-              {/* Instagram Option */}
-              <a 
-                href="https://instagram.com/farah_origin" 
-                target="_blank" 
-                rel="noreferrer"
-                className="flex items-center justify-center gap-3 bg-white px-6 py-4 rounded-2xl border border-[#EAD0CB] hover:border-[#E1306C] hover:shadow-md transition-all duration-300 text-[#4A3B3A] group"
-              >
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  className="w-5 h-5 text-[#E1306C] group-hover:scale-110 transition-transform"
-                >
-                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                  <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
-                </svg>
-                <span className="font-bold tracking-wide">@farah_origin</span>
-              </a>
-
-              {/* Location Tag */}
-              <div className="flex items-center justify-center gap-2 text-[#2D1F1E] font-bold tracking-widest uppercase text-sm bg-white px-6 py-4 rounded-2xl border border-[#FCDAD5] shadow-sm">
-                <MapPin className="w-5 h-5 text-[#E27D86]" />
-                <span>ERODE</span>
-              </div>
-
+      {/* 3. HERO HERO SECTION */}
+      <header id="home" className="max-w-6xl mx-auto px-6 py-16 md:py-28 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className="space-y-6">
+          <div className="inline-flex items-center gap-2 bg-[#FFF2F0] dark:bg-[#362422] border border-[#FAD2CB] dark:border-[#543936] px-4 py-2 rounded-full text-xs font-semibold tracking-wider text-[#E27D86]">
+            ✨ Custom Handcrafts & Bridal Artistry
+          </div>
+          <h1 className={`${playfair.className} text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] ${darkMode ? 'text-white' : 'text-[#2D1F1E]'}`}>
+            Customized <br />
+            <span className="text-[#E27D86]">Crochet & Henna</span>
+          </h1>
+          <p className="text-base md:text-lg opacity-80 max-w-lg leading-relaxed">
+            Welcome to a premium world of intricate threads and elegant stains. From personalized timeless woolen gifts to majestic bridal traditional design work—crafted just for your special moments.
+          </p>
+          <div className="pt-4 flex flex-wrap gap-4">
+            <a href="#gallery" className="inline-flex items-center gap-2 bg-[#E27D86] text-white px-7 py-4 rounded-2xl font-bold shadow-lg shadow-[#E27D86]/30 hover:bg-[#D16C75] transition-all">
+              Explore Collections <ArrowRight className="w-4 h-4" />
+            </a>
+            <div className="flex items-center gap-2 text-sm font-bold px-4 py-2">
+              <MapPin className="w-4 h-4 text-[#E27D86]" /> Based in Erode
             </div>
-            
-            <p className="text-center text-xs text-[#A38E8B] font-medium tracking-wider mt-6">
-              ✨ DM or Message us on WhatsApp for custom sizing and requests ✨
+          </div>
+        </div>
+        
+        {/* Poster Component Integrated into the Hero Design */}
+        <div className={`p-6 rounded-[40px] border transition-all duration-500 max-w-sm mx-auto shadow-2xl
+          ${darkMode ? 'bg-[#261B1A] border-[#3D2927]' : 'bg-white border-[#F7E4E0]'}`}
+        >
+          <div className={`border-2 border-dashed rounded-[32px] p-6 text-center ${darkMode ? 'border-[#4A3230]' : 'border-[#F5D5CE]'}`}>
+            <span className={`${playfair.className} italic text-sm text-[#C98E82]`}>✨ Farah Origin Creation ✨</span>
+            <div className={`${greatVibes.className} text-5xl text-[#E27D86] my-4`}>Farah Origin</div>
+            <div className="space-y-2 text-xs uppercase tracking-widest opacity-80">
+              <p>♥ Handmade Crochet</p>
+              <p>♥ Intricate Mehandi</p>
+              <p>♥ Woolen Bouquets</p>
+            </div>
+            <div className="mt-6 bg-[#E27D86] text-white text-[11px] font-bold py-2.5 rounded-xl uppercase tracking-wider">
+              Perfect For Birthdays & Events
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* 4. BRAND CORE ETHOS (FEATURE HIGHLIGHTS) */}
+      <section className={`py-12 border-y ${darkMode ? 'bg-[#251A19]/50 border-[#3D2927]' : 'bg-[#FDF6F4] border-[#F5E6E3]'}`}>
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          <div className="space-y-2 p-4">
+            <div className="mx-auto w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm text-[#E27D86]">✦</div>
+            <h3 className={`${playfair.className} text-xl font-bold`}>Unique & Personalized</h3>
+            <p className="text-xs opacity-70">Every piece or design pattern configured step-by-step to reflect your individual style direction.</p>
+          </div>
+          <div className="space-y-2 p-4">
+            <div className="mx-auto w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm text-[#E27D86]">✦</div>
+            <h3 className={`${playfair.className} text-xl font-bold`}>Perfect Gift Layouts</h3>
+            <p className="text-xs opacity-70">Timeless arrangements like forever blooming woolen tulips packaged cleanly into elite bundles.</p>
+          </div>
+          <div className="space-y-2 p-4">
+            <div className="mx-auto w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm text-[#E27D86]">✦</div>
+            <h3 className={`${playfair.className} text-xl font-bold`}>Cute & Creative Designs</h3>
+            <p className="text-xs opacity-70">Meticulous loops and deep rich henna stains tailored directly for high aesthetic pleasure.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. PORTFOLIO GALLERY SECTIONS */}
+      <section id="gallery" className="max-w-6xl mx-auto px-6 py-20">
+        <div className="text-center space-y-3 mb-16">
+          <h2 className={`${playfair.className} text-4xl md:text-5xl font-bold`}>Our Handcrafted Offerings</h2>
+          <p className="text-sm opacity-70 max-w-md mx-auto">Explore premium, luxury products built meticulously to make every milestone unforgettable.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Card 1 */}
+          <div className={`group p-5 rounded-3xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl
+            ${darkMode ? 'bg-[#2D1E1D] border-[#442E2C]' : 'bg-white border-[#F5E6E3] shadow-md'}`}
+          >
+            <div className="aspect-[4/5] rounded-2xl overflow-hidden relative bg-[#FDF7F5] dark:bg-[#231716] flex items-center justify-center border border-dashed border-[#EAD0CB]">
+              {/* <img src="/crochet.jpg" alt="Crochet Portfolio" className="absolute inset-0 w-full h-full object-cover" /> */}
+              <ShoppingBag className="w-12 h-12 text-[#E27D86]/40 absolute" />
+            </div>
+            <div className="mt-5 space-y-2">
+              <h3 className={`${playfair.className} text-2xl font-bold`}>Crochet Gifts & Decor</h3>
+              <p className="text-xs opacity-70">Custom interactive premium frames, toys, accessories, and cozy customized keepsakes tailored out of organic yarn fibers.</p>
+            </div>
+          </div>
+
+          {/* Card 2 */}
+          <div className={`group p-5 rounded-3xl border-2 border-[#E27D86] transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl
+            ${darkMode ? 'bg-[#33201E]' : 'bg-white shadow-lg'}`}
+          >
+            <div className="aspect-[4/5] rounded-2xl overflow-hidden relative bg-[#FFF2F0] dark:bg-[#261817] flex items-center justify-center border border-dashed border-[#FAD2CB]">
+              {/* <img src="/henna.jpg" alt="Henna Portfolio" className="absolute inset-0 w-full h-full object-cover" /> */}
+              <Sparkles className="w-12 h-12 text-[#E27D86]/40 absolute" />
+            </div>
+            <div className="mt-5 space-y-2">
+              <h3 className={`${playfair.className} text-2xl font-bold text-[#E27D86]`}>Bridal & Occasion Henna</h3>
+              <p className="text-xs opacity-70">Exquisite traditional styling, deep geometric lines, patterns, and flawless layout application details for your landmark event days.</p>
+            </div>
+          </div>
+
+          {/* Card 3 */}
+          <div className={`group p-5 rounded-3xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl
+            ${darkMode ? 'bg-[#2D1E1D] border-[#442E2C]' : 'bg-white border-[#F5E6E3] shadow-md'}`}
+          >
+            <div className="aspect-[4/5] rounded-2xl overflow-hidden relative bg-[#FDF7F5] dark:bg-[#231716] flex items-center justify-center border border-dashed border-[#EAD0CB]">
+              {/* <img src="/flowers.jpg" alt="Woolen Flowers" className="absolute inset-0 w-full h-full object-cover" /> */}
+              <Heart className="w-12 h-12 text-[#E27D86]/40 absolute" />
+            </div>
+            <div className="mt-5 space-y-2">
+              <h3 className={`${playfair.className} text-2xl font-bold`}>Eternal Woolen Bouquets</h3>
+              <p className="text-xs opacity-70">Hand-knit tulip and rose arrangement models built perfectly to capture elegant visual design themes without ever fading away.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. HOW TO PLACE AN ORDER SECTION */}
+      <section id="about" className={`py-20 ${darkMode ? 'bg-[#261B1A]' : 'bg-[#FFF4F1]'}`}>
+        <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6">
+            <h2 className={`${playfair.className} text-4xl font-bold`}>Simple, Customized Order Process</h2>
+            <p className="text-sm opacity-80 leading-relaxed">
+              Every beautiful creation begins with an idea. To ensure your customized configuration meets absolute perfection, we adhere to a refined, personalized fulfillment route:
             </p>
+            <div className="space-y-4">
+              <div className="flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-[#E27D86] mt-0.5 shrink-0" />
+                <div>
+                  <h4 className="font-bold text-sm">1. Share Your Vision</h4>
+                  <p className="text-xs opacity-70">DM us on Instagram or connect via WhatsApp with reference themes or canvas sizes.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-[#E27D86] mt-0.5 shrink-0" />
+                <div>
+                  <h4 className="font-bold text-sm">2. Design & Approve</h4>
+                  <p className="text-xs opacity-70">We pick custom palettes, design outlines, or premium materials for your explicit go-ahead.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-[#E27D86] mt-0.5 shrink-0" />
+                <div>
+                  <h4 className="font-bold text-sm">3. Handcrafting & Safe Delivery</h4>
+                  <p className="text-xs opacity-70">We forge your pieces with love and secure them inside protective packaging ready for transit.</p>
+                </div>
+              </div>
+            </div>
           </div>
-
+          <div className="bg-white dark:bg-[#1E1514] p-8 rounded-[36px] shadow-xl border border-[#F5D5CE] dark:border-[#4A3230] text-center space-y-4">
+            <p className={`${playfair.className} italic text-xl text-[#C98E82]`}>"Made just for you, to make every single moment special."</p>
+            <div className={`${greatVibes.className} text-4xl text-[#2D1F1E] dark:text-white`}>— Farah Origin</div>
+          </div>
         </div>
-      </main>
+      </section>
 
-      {/* Styled Footer Badges */}
-      <footer className="max-w-4xl mx-auto px-6 mt-4">
-        <div className="flex flex-wrap justify-between items-center gap-4 text-xs font-semibold tracking-widest text-[#B59D9A] uppercase bg-white/40 backdrop-blur-sm py-4 px-8 rounded-full border border-[#F5E6E3]">
-          <div>✦ Unique & Personalized</div>
-          <div>✦ Perfect Gifts</div>
-          <div>✦ Cute Designs</div>
+      {/* 7. PREMIUM FOOTER ACTION PANEL */}
+      <section id="contact" className="max-w-5xl mx-auto px-4 py-20">
+        <div className={`rounded-[45px] p-8 md:p-14 border text-center transition-all duration-500
+          ${darkMode ? 'bg-[#2A1D1C] border-[#442E2C]' : 'bg-gradient-to-br from-[#FDF5F3] to-[#FCEBE7] border-[#F3D1C9]'}`}
+        >
+          <h2 className={`${playfair.className} text-3xl md:text-5xl font-bold mb-4`}>Bring Your Ideas to Reality</h2>
+          <p className="text-sm opacity-80 max-w-md mx-auto mb-10">Reach out below to configure secure payments, custom dynamic scheduling dates, and global design requests.</p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+            {/* WhatsApp Trigger */}
+            <a 
+              href="https://wa.me/918438440625" 
+              target="_blank" 
+              rel="noreferrer"
+              className={`flex items-center justify-center gap-3 px-6 py-4 rounded-2xl border hover:border-[#25D366] hover:shadow-md transition-all duration-300 font-bold tracking-wide
+                ${darkMode ? 'bg-[#231716] border-[#442E2C]' : 'bg-white border-[#EAD0CB]'}`}
+            >
+              <Phone className="w-5 h-5 text-[#25D366]" />
+              <span>8438440625</span>
+            </a>
+
+            {/* Instagram Link */}
+            <a 
+              href="https://instagram.com/farah_origin" 
+              target="_blank" 
+              rel="noreferrer"
+              className={`flex items-center justify-center gap-3 px-6 py-4 rounded-2xl border hover:border-[#E1306C] hover:shadow-md transition-all duration-300 font-bold tracking-wide
+                ${darkMode ? 'bg-[#231716] border-[#442E2C]' : 'bg-white border-[#EAD0CB]'}`}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-[#E1306C]">
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+              </svg>
+              <span>@farah_origin</span>
+            </a>
+
+            {/* Location Display */}
+            <div className={`flex items-center justify-center gap-2 font-bold tracking-widest uppercase text-sm px-6 py-4 rounded-2xl border shadow-sm
+              ${darkMode ? 'bg-[#231716] border-[#442E2C]' : 'bg-white border-[#FCDAD5]'}`}
+            >
+              <MapPin className="w-5 h-5 text-[#E27D86]" />
+              <span>ERODE, INDIA</span>
+            </div>
+          </div>
         </div>
+      </section>
+
+      {/* 8. MASTER PAGE FOOTER */}
+      <footer className="w-full text-center border-t border-[#F5E6E3] dark:border-[#3A2927] py-8 text-xs opacity-60 tracking-wider">
+        <p>© 2026 Farah Origin Boutique. All Rights Handcrafted with Love.</p>
       </footer>
-
     </div>
   );
 }
