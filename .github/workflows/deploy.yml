@@ -25,14 +25,11 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Install dependencies
-        run: npm ci
-
       - name: Build with Next.js
         run: npm run build
+
+      - name: Check Folder Files (Debug)
+        run: ls -la   # <-- Idha pudhusa add pannunga
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
