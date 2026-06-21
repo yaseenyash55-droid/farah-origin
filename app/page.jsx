@@ -1,163 +1,181 @@
 import React from 'react';
-import { Mail, Phone, Globe, MapPin, Heart, Sparkles } from 'lucide-react';
+import { Phone, Instagram, MapPin, Heart, Sparkles, ShoppingBag } from 'lucide-react';
+// Importing beautiful premium fonts directly through Next.js
+import { Playfair_Display, Great_Vibes, Plus_Jakarta_Sans } from 'next/font/google';
 
-export default function FarahOriginBoutique() {
+const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '600', '700'] });
+const greatVibes = Great_Vibes({ subsets: ['latin'], weight: ['400'] });
+const jakarta = Plus_Jakarta_Sans({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
+
+export default function FarahOriginPremiumBoutique() {
   return (
-    <div className="min-h-screen bg-[#FFF9F6] text-[#4A3E3D] font-sans antialiased relative overflow-x-hidden">
+    <div className={`${jakarta.className} min-h-screen bg-[#FFF8F6] text-[#4A3B3A] antialiased relative overflow-hidden pb-12`}>
       
-      {/* Decorative Top Banner */}
-      <div className="w-full bg-[#FCEBE7] py-2 text-center text-xs tracking-widest uppercase flex items-center justify-center gap-2 border-b border-[#F5D6CE]">
-        <Sparkles className="w-3 h-3 text-[#D3A297]" />
+      {/* Soft, premium ambient glow blobs in the background */}
+      <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[#FCEAE6] blur-[120px] pointer-events-none opacity-70" />
+      <div className="absolute bottom-[10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[#FBE3DE] blur-[100px] pointer-events-none opacity-60" />
+
+      {/* Elegant Floating Header Banner */}
+      <div className="w-full bg-[#FCECE8] py-3 text-center text-xs tracking-[0.2em] uppercase font-semibold flex items-center justify-center gap-2 border-b border-[#F3D1C9] text-[#A67C74]">
+        <Sparkles className="w-3.5 h-3.5 text-[#E27D86] animate-pulse" />
         Handmade with Love & Care
-        <Sparkles className="w-3 h-3 text-[#D3A297]" />
+        <Sparkles className="w-3.5 h-3.5 text-[#E27D86] animate-pulse" />
       </div>
 
-      {/* Hero / Main Poster Card Section */}
-      <main className="max-w-4xl mx-auto px-4 py-12 md:py-20">
-        <div className="bg-white rounded-[40px] shadow-xl shadow-[#F3E1DC]/50 p-6 md:p-12 border-2 border-[#FAECE8] relative">
+      {/* Main Content Container */}
+      <main className="max-w-5xl mx-auto px-4 py-8 md:py-16 relative z-10">
+        
+        {/* Main Poster-Style Card Frame */}
+        <div className="bg-white/80 backdrop-blur-md rounded-[45px] shadow-[0_20px_50px_rgba(243,225,220,0.7)] p-5 md:p-12 border border-[#F7E4E0] relative">
           
-          {/* Aesthetic Arch Frame Design Element */}
-          <div className="border border-[#F5D6CE] rounded-[32px] p-6 md:p-10 bg-[#FFFDFD] relative">
+          {/* Aesthetic Inner Border Box */}
+          <div className="border-2 border-[#F5D5CE] rounded-[36px] p-6 md:p-12 bg-white/50 relative">
             
-            {/* Header Script */}
-            <div className="text-center mb-2">
-              <span className="font-serif italic text-xl md:text-2xl text-[#D3A297] block font-light tracking-wide">
-                ✨ Handmade with Love ✨
+            {/* Top Minimal Decoration */}
+            <div className="text-center mb-4">
+              <span className={`${playfair.className} italic text-xl md:text-2xl text-[#C98E82] tracking-wide block`}>
+                ✨ Beautifully Handcrafted ✨
               </span>
-              <div className="text-[#F19CA7] text-2xl my-1">♥</div>
+              <div className="text-[#F19CA7] text-xl mt-2 animate-bounce">♥</div>
             </div>
 
-            {/* Main Title */}
-            <h1 className="text-center font-serif text-4xl md:text-6xl font-bold tracking-tight text-[#3A2A29] mb-4">
+            {/* Main Typographic Titles */}
+            <h1 className={`${playfair.className} text-center text-5xl md:text-7xl font-bold tracking-tight text-[#2D1F1E] mb-2`}>
               Customized
             </h1>
             
-            <h2 className="text-center font-serif text-3xl md:text-5xl text-[#E27D86] font-medium mb-6">
-              Crochet <span className="font-sans text-2xl md:text-3xl text-[#D3A297]">&</span> Henna
+            <h2 className={`${playfair.className} text-center text-4xl md:text-6xl text-[#E27D86] font-semibold tracking-wide mb-6`}>
+              Crochet <span className="font-sans text-2xl md:text-3xl text-[#C98E82]">&</span> Henna
             </h2>
 
-            {/* Signature Branding */}
-            <div className="flex justify-center items-center gap-2 mb-10">
-              <span className="text-lg italic text-[#8A7978]">by</span>
-              <span className="font-['Great_Vibes'] text-4xl md:text-5xl text-[#3A2A29] font-semibold tracking-wide">
+            {/* Signature Creator Brand */}
+            <div className="flex justify-center items-center gap-3 mb-10">
+              <span className="text-sm uppercase tracking-[0.15em] text-[#9C8481] font-medium">by</span>
+              <span className={`${greatVibes.className} text-5xl md:text-7xl text-[#2D1F1E] drop-shadow-sm`}>
                 Farah Origin
               </span>
             </div>
 
-            {/* Tag Badges */}
-            <div className="flex flex-wrap justify-center gap-4 md:gap-8 mb-12">
-              <div className="flex items-center gap-2 bg-[#FFF3F1] px-5 py-2.5 rounded-full border border-[#FCDAD5] text-sm font-medium">
-                <span className="text-[#E27D86]">♥</span> Handmade Crochet
+            {/* Premium Pill Badges */}
+            <div className="flex flex-wrap justify-center gap-4 mb-14">
+              <div className="flex items-center gap-2 bg-[#FFF2F0] px-6 py-3 rounded-full border border-[#FAD2CB] text-sm font-semibold tracking-wide text-[#5C4644] shadow-sm">
+                <Heart className="w-4 h-4 text-[#E27D86] fill-[#E27D86]" /> Handmade Crochet
               </div>
-              <div className="flex items-center gap-2 bg-[#FFF3F1] px-5 py-2.5 rounded-full border border-[#FCDAD5] text-sm font-medium">
-                <span className="text-[#E27D86]">♥</span> Mehandi Artistry
-              </div>
-            </div>
-
-            {/* Product Grid Gallery */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-12">
-              {/* Card 1 */}
-              <div className="bg-white p-3 rounded-2xl shadow-sm border border-[#F5E6E3] transform hover:-translate-y-1 transition duration-300">
-                <div className="aspect-square bg-[#FBF4F2] rounded-xl overflow-hidden relative flex items-center justify-center text-[#D3A297]">
-                  {/* Replace with <img> src for actual items */}
-                  <span className="text-xs uppercase tracking-wider text-center p-4">Crochet Gifts & Decor</span>
-                </div>
-              </div>
-              
-              {/* Card 2 */}
-              <div className="bg-white p-3 rounded-2xl shadow-sm border border-[#F5E6E3] transform hover:-translate-y-1 transition duration-300 md:scale-105">
-                <div className="aspect-square bg-[#FBF4F2] rounded-xl overflow-hidden relative flex items-center justify-center text-[#D3A297]">
-                  {/* Replace with <img> src for Henna art */}
-                  <span className="text-xs uppercase tracking-wider text-center p-4">Bridal & Custom Mehandi</span>
-                </div>
-              </div>
-
-              {/* Card 3 */}
-              <div className="bg-white p-3 rounded-2xl shadow-sm border border-[#F5E6E3] transform hover:-translate-y-1 transition duration-300">
-                <div className="aspect-square bg-[#FBF4F2] rounded-xl overflow-hidden relative flex items-center justify-center text-[#D3A297]">
-                  {/* Replace with <img> src for Tulips */}
-                  <span className="text-xs uppercase tracking-wider text-center p-4">Woolen Bouquets</span>
-                </div>
+              <div className="flex items-center gap-2 bg-[#FFF2F0] px-6 py-3 rounded-full border border-[#FAD2CB] text-sm font-semibold tracking-wide text-[#5C4644] shadow-sm">
+                <Heart className="w-4 h-4 text-[#E27D86] fill-[#E27D86]" /> Mehandi Artistry
               </div>
             </div>
 
-            {/* Callout Badges */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center border-t border-dashed border-[#EAD0CB] pt-10">
+            {/* Interactive Image Showcase Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 my-14">
               
-              <div className="text-center p-4 rounded-2xl border border-[#FCEBE7] bg-[#FFFBFB]">
-                <p className="text-xs text-[#9E8B88] uppercase tracking-wider leading-relaxed">
-                  "Made just for you, to make every moment <span className="text-[#E27D86] font-medium">special</span>"
+              {/* Product Card 1 */}
+              <div className="group bg-white p-4 rounded-3xl shadow-md border border-[#F5E6E3] transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
+                <div className="aspect-[4/5] bg-[#FDF7F5] rounded-2xl overflow-hidden relative flex flex-col items-center justify-center p-6 border border-dashed border-[#EAD0CB]">
+                  {/* Subtle decorative background icon */}
+                  <ShoppingBag className="w-12 h-12 text-[#F2D1CA] mb-3 group-hover:scale-110 transition-transform" />
+                  <p className={`${playfair.className} text-xl font-bold text-[#4A3B3A] text-center`}>Crochet Gifts & Deco</p>
+                  <p className="text-xs text-[#A38E8B] mt-2 text-center">Custom orders made with soft yarn</p>
+                </div>
+              </div>
+              
+              {/* Product Card 2 (Featured center) */}
+              <div className="group bg-white p-4 rounded-3xl shadow-xl border-2 border-[#F19CA7] transition-all duration-300 hover:shadow-2xl md:-translate-y-3 hover:-translate-y-5">
+                <div className="absolute top-2 right-2 bg-[#E27D86] text-white text-[10px] uppercase tracking-widest px-3 py-1 rounded-full font-bold">Featured</div>
+                <div className="aspect-[4/5] bg-[#FFF2F0] rounded-2xl overflow-hidden relative flex flex-col items-center justify-center p-6 border border-dashed border-[#FAD2CB]">
+                  <Sparkles className="w-12 h-12 text-[#E27D86] mb-3 group-hover:rotate-12 transition-transform" />
+                  <p className={`${playfair.className} text-2xl font-bold text-[#2D1F1E] text-center`}>Bridal Mehandi</p>
+                  <p className="text-xs text-[#A38E8B] mt-2 text-center">Intricate custom traditional designs</p>
+                </div>
+              </div>
+
+              {/* Product Card 3 */}
+              <div className="group bg-white p-4 rounded-3xl shadow-md border border-[#F5E6E3] transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
+                <div className="aspect-[4/5] bg-[#FDF7F5] rounded-2xl overflow-hidden relative flex flex-col items-center justify-center p-6 border border-dashed border-[#EAD0CB]">
+                  <Heart className="w-12 h-12 text-[#F2D1CA] mb-3 group-hover:scale-110 transition-transform" />
+                  <p className={`${playfair.className} text-xl font-bold text-[#4A3B3A] text-center`}>Woolen Bouquets</p>
+                  <p className="text-xs text-[#A38E8B] mt-2 text-center">Flowers that bloom forever</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Aesthetic Poster Highlight Badges */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center border-t border-dashed border-[#EAD0CB] pt-12">
+              
+              <div className="text-center p-6 rounded-2xl border border-[#FCEBE7] bg-[#FFFDFD] shadow-sm">
+                <p className={`${playfair.className} text-sm italic text-[#8A716E] leading-relaxed`}>
+                  "Made just for you, to make every single moment <span className="text-[#E27D86] font-bold not-italic">special</span>"
                 </p>
               </div>
 
-              <div className="bg-[#E27D86] text-white text-center p-6 rounded-2xl shadow-md transform rotate-[-1deg]">
-                <p className="text-xs uppercase tracking-widest font-semibold opacity-90 mb-1">Perfect For</p>
-                <p className="font-serif text-xl font-medium">Birthdays & Special Moments</p>
-                <div className="text-white text-xs mt-1">♥</div>
+              <div className="bg-[#E27D86] text-white text-center p-6 rounded-2xl shadow-lg transform rotate-[-1deg] transition-transform hover:rotate-0 duration-300">
+                <p className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-90 mb-1">Perfect For</p>
+                <p className={`${playfair.className} text-2xl font-semibold`}>Birthdays & Events</p>
+                <div className="text-white text-sm mt-2">♥</div>
               </div>
 
-              <div className="text-center p-4 rounded-full border border-dashed border-[#F0C2BA] aspect-square flex flex-col justify-center max-w-[140px] mx-auto bg-white">
-                <span className="font-serif text-sm text-[#3A2A29] font-semibold block">Mehandi</span>
-                <span className="text-[#D3A297] my-0.5">&</span>
-                <span className="font-serif text-sm text-[#3A2A29] font-semibold block">Woolen</span>
+              <div className="text-center p-6 rounded-full border-2 border-dashed border-[#F2D1CA] aspect-square flex flex-col justify-center max-w-[150px] mx-auto bg-white shadow-inner">
+                <span className={`${playfair.className} text-base text-[#2D1F1E] font-bold block`}>Mehandi</span>
+                <span className="text-[#D3A297] font-serif my-0.5">&</span>
+                <span className={`${playfair.className} text-base text-[#2D1F1E] font-bold block`}>Woolen</span>
               </div>
 
             </div>
 
           </div>
 
-          {/* Call to Action Footer */}
-          <div className="mt-12 bg-[#FCEBE7] rounded-3xl p-6 md:p-8 border border-[#F5D6CE]">
-            <h3 className="text-center font-serif text-xl text-[#3A2A29] font-semibold mb-6">
-              Order Now & Enquiries
+          {/* Premium Contact & Action Grid */}
+          <div className="mt-12 bg-gradient-to-br from-[#FDF5F3] to-[#FCEBE7] rounded-[32px] p-6 md:p-10 border border-[#F3D1C9]">
+            <h3 className={`${playfair.className} text-center text-2xl md:text-3xl text-[#2D1F1E] font-bold mb-8`}>
+              Place an Order & Enquiries
             </h3>
             
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               
-              {/* WhatsApp Contact */}
+              {/* WhatsApp Option */}
               <a 
                 href="https://wa.me/918438440625" 
                 target="_blank" 
                 rel="noreferrer"
-                className="w-full md:w-auto flex items-center justify-center gap-3 bg-white px-6 py-3 rounded-xl border border-[#EAD0CB] hover:shadow-md transition text-[#4A3E3D]"
+                className="flex items-center justify-center gap-3 bg-white px-6 py-4 rounded-2xl border border-[#EAD0CB] hover:border-[#25D366] hover:shadow-md transition-all duration-300 text-[#4A3B3A] group"
               >
-                <Phone className="w-5 h-5 text-[#25D366]" />
-                <span className="font-medium tracking-wide">8438440625</span>
+                <Phone className="w-5 h-5 text-[#25D366] group-hover:scale-110 transition-transform" />
+                <span className="font-bold tracking-wide">8438440625</span>
               </a>
 
-              {/* Instagram Handle */}
+              {/* Instagram Option */}
               <a 
                 href="https://instagram.com/farah_origin" 
                 target="_blank" 
                 rel="noreferrer"
-                className="w-full md:w-auto flex items-center justify-center gap-3 bg-white px-6 py-3 rounded-xl border border-[#EAD0CB] hover:shadow-md transition text-[#4A3E3D]"
+                className="flex items-center justify-center gap-3 bg-white px-6 py-4 rounded-2xl border border-[#EAD0CB] hover:border-[#E1306C] hover:shadow-md transition-all duration-300 text-[#4A3B3A] group"
               >
-                <Globe className="w-5 h-5 text-[#E1306C]" />
-                <span className="font-medium tracking-wide">@farah_origin</span>
+                <Instagram className="w-5 h-5 text-[#E1306C] group-hover:scale-110 transition-transform" />
+                <span className="font-bold tracking-wide">@farah_origin</span>
               </a>
 
-              {/* Location Badge */}
-              <div className="w-full md:w-auto flex items-center justify-center gap-2 text-[#3A2A29] font-semibold tracking-wider uppercase text-sm bg-[#FFF3F1] px-6 py-3 rounded-xl border border-[#FCDAD5]">
-                <MapPin className="w-4 h-4 text-[#E27D86]" />
-                <span>Erode</span>
+              {/* Location Tag */}
+              <div className="flex items-center justify-center gap-2 text-[#2D1F1E] font-bold tracking-widest uppercase text-sm bg-white px-6 py-4 rounded-2xl border border-[#FCDAD5] shadow-sm">
+                <MapPin className="w-5 h-5 text-[#E27D86]" />
+                <span>ERODE</span>
               </div>
 
             </div>
             
-            <p className="text-center text-xs text-[#9E8B88] tracking-wide mt-6">
-              DM us for custom configurations, orders & dynamic event bookings
+            <p className="text-center text-xs text-[#A38E8B] font-medium tracking-wider mt-6">
+              ✨ DM or Message us on WhatsApp for custom sizing and requests ✨
             </p>
           </div>
 
         </div>
       </main>
 
-      {/* Sub Footer Footer Notes */}
-      <footer className="w-full bg-white border-t border-[#F5E6E3] py-6 text-xs text-[#A89693]">
-        <div className="max-w-4xl mx-auto px-4 flex flex-wrap justify-between gap-4 text-center">
-          <div>✦ Perfect gifts</div>
-          <div>✦ Unique & personalized</div>
-          <div>✦ Cute designs</div>
+      {/* Styled Footer Badges */}
+      <footer className="max-w-4xl mx-auto px-6 mt-4">
+        <div className="flex flex-wrap justify-between items-center gap-4 text-xs font-semibold tracking-widest text-[#B59D9A] uppercase bg-white/40 backdrop-blur-sm py-4 px-8 rounded-full border border-[#F5E6E3]">
+          <div>✦ Unique & Personalized</div>
+          <div>✦ Perfect Gifts</div>
+          <div>✦ Cute Designs</div>
         </div>
       </footer>
 
