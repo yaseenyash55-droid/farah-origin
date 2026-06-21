@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  images: {
-    unoptimized: true,
-  },
+  output: 'export', // <-- Indha line dhaan ./out folder-a create pannum
 };
 
-export default nextConfig;
+module.exports = nextConfig;
