@@ -8,23 +8,23 @@ export default function Home() {
     <>
       <Navbar />
       
-      {/* Hero Section */}
-      <header className="relative pt-32 pb-20 md:py-40 flex items-center justify-center overflow-hidden">
+      {/* Authentic Hero Section */}
+      <header className="relative pt-32 pb-20 md:py-40 flex items-center justify-center overflow-hidden bg-[var(--background)]">
         <div className="container relative z-10 text-center max-w-3xl">
-          <span className="text-xs uppercase tracking-widest text-[var(--accent)] font-semibold mb-3 block">
+          <span className="text-xs uppercase tracking-widest text-[var(--accent)] font-semibold mb-4 block letter-spacing-2">
             Erode, Tamil Nadu
           </span>
-          <h1 className="text-4xl md:text-6xl font-light tracking-wide leading-tight mb-6">
-            Handcrafted Luxury, Designed to Endure
+          <h1 className="text-4xl md:text-6xl font-normal tracking-wide leading-tight mb-6 text-[var(--foreground)]">
+            Rooted in Tradition, Crafted with Grace
           </h1>
-          <p className="text-base md:text-lg text-gray-400 mb-8 max-w-xl mx-auto leading-relaxed">
-            Discover heirloom-quality crochet creations and custom-drawn bridal henna artistry tailored for your memorable milestones.
+          <p className="text-base md:text-lg text-[#5d4037] mb-8 max-w-xl mx-auto leading-relaxed font-sans">
+            Timeless bridal henna artistry and heirloom-quality crochet, woven with patience and designed to celebrate life's most beautiful moments.
           </p>
           <a
             href="#gallery"
-            className="inline-block border border-[var(--accent)] text-[var(--accent)] px-8 py-3 rounded-full text-sm tracking-wider uppercase font-medium hover:bg-[var(--accent)] hover:text-[#0d0c0c] transition-all duration-300"
+            className="inline-block border border-[var(--accent)] text-[var(--accent)] px-8 py-3 rounded text-sm tracking-wider uppercase font-medium hover:bg-[var(--accent)] hover:text-[#fdfbf7] transition-all duration-300 font-sans"
           >
-            Explore Portfolio
+            View Our Work
           </a>
         </div>
       </header>
@@ -34,8 +34,7 @@ export default function Home() {
         <Testimonials />
       </main>
 
-      {/* Footer Element */}
-      <footer className="py-8 text-center text-xs text-gray-600 border-t border-[var(--border)]">
+      <footer className="py-12 text-center text-sm text-[#795548] border-t border-[var(--border)] font-sans">
         <p>&copy; {new Date().getFullYear()} Farah Origin. All Rights Reserved.</p>
       </footer>
 
