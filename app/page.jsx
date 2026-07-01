@@ -2,195 +2,184 @@ import Navbar from "@/components/Navbar";
 
 export default function Home() {
   return (
-    <div
-      className="min-h-screen"
-      style={{
-        background:
-          "linear-gradient(180deg,#FFFDFB 0%,#FFF8F3 40%,#FFF3EE 100%)",
-      }}
-    >
+    <div className="min-h-screen bg-[#FFF8F3]">
+
       <Navbar />
 
       {/* Hero Section */}
-      <main className="container mx-auto px-6 pt-32 pb-20 md:pt-44 flex flex-col lg:flex-row items-center justify-between gap-16">
+      <section className="container mx-auto px-6 py-20 lg:py-32">
 
-        {/* Left Content */}
-        <div className="max-w-2xl">
+        <div className="grid lg:grid-cols-2 gap-14 items-center">
 
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-[#FFF7F3] border border-[#E9D9CF] rounded-full px-5 py-2 mb-10 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-[#D98B9B]"></span>
+          {/* Left Content */}
+          <div>
 
-            <span className="text-xs tracking-[0.25em] uppercase font-semibold text-[#6B5247]">
+            <span className="inline-block px-5 py-2 rounded-full bg-pink-100 text-[#C97B8D] font-semibold tracking-widest uppercase text-xs mb-8">
               Handmade with Love
             </span>
-          </div>
 
-          {/* Heading */}
+            <h1 className="text-6xl lg:text-7xl font-bold leading-tight text-[#3B241C]">
+              Customized
+              <br />
+              <span className="text-[#D98B9B] italic">
+                Crochet &
+              </span>
+              <br />
+              Henna
+            </h1>
 
-          <h1 className="font-serif text-5xl md:text-7xl leading-tight text-[#3B241C]">
-            Customized
-            <br />
+            <div className="inline-block mt-6 bg-pink-200 px-6 py-3 rounded-xl">
+              <p className="text-3xl italic text-[#3B241C]">
+                by Farah Origin
+              </p>
+            </div>
 
-            <span className="text-[#D98B9B] italic">
-              Crochet &
-            </span>
+            <p className="mt-8 text-lg text-[#6B5247] leading-8 max-w-xl">
+              Handmade crochet gifts, elegant mehendi, customized bouquets,
+              personalized gifts and premium handcrafted creations made with
+              love for every special occasion.
+            </p>
 
-            <br />
+            <div className="mt-10 flex gap-4">
 
-            Henna
-          </h1>
+              <button className="bg-[#D98B9B] text-white px-8 py-4 rounded-xl hover:bg-[#C97B8D] transition">
+                View Collection
+              </button>
 
-          {/* Brush Text */}
+              <button className="border border-[#D98B9B] text-[#3B241C] px-8 py-4 rounded-xl hover:bg-pink-50 transition">
+                Contact Us
+              </button>
 
-          <div className="inline-block mt-6 px-6 py-2 rounded-md bg-[#F8CCD3]">
-            <span className="text-3xl font-serif text-[#3B241C] italic">
-              by Farah Origin
-            </span>
-          </div>
-
-          {/* Description */}
-
-          <p className="mt-8 max-w-lg leading-8 text-[#6B5247]">
-            Handmade crochet gifts, elegant bridal mehendi designs,
-            customized bouquets, and personalized creations crafted with
-            love for birthdays, weddings, baby showers and every special
-            occasion.
-          </p>
-
-          {/* Buttons */}
-
-          <div className="flex flex-wrap items-center gap-5 mt-12">
-
-            <a
-              href="#collections"
-              className="px-8 py-4 rounded-lg bg-[#D98B9B] text-white font-semibold uppercase tracking-widest shadow-lg hover:bg-[#C97B8D] transition"
-            >
-              View Collection
-            </a>
-
-            <a
-              href="#contact"
-              className="px-8 py-4 rounded-lg border border-[#D98B9B] text-[#3B241C] font-semibold uppercase tracking-widest hover:bg-[#FFF0F3] transition"
-            >
-              Contact Us
-            </a>
+            </div>
 
           </div>
-        </div>
 
-        {/* Right Card */}
+          {/* Right Card */}
 
-        <div className="bg-[#FFFDFC] border border-[#E9D9CF] rounded-3xl p-8 shadow-2xl w-full max-w-sm">
+          <div className="bg-white rounded-3xl shadow-xl border border-pink-100 p-10">
 
-          <p className="text-center uppercase tracking-[0.3em] text-xs text-[#A88B80] mb-2">
-            Farah Origin
-          </p>
+            <h2 className="text-4xl text-center font-bold text-[#3B241C]">
+              Our Services
+            </h2>
 
-          <h2 className="text-3xl font-serif text-center text-[#3B241C] mb-8">
-            Our Services
-          </h2>
+            <div className="mt-8 space-y-4">
 
-          <div className="space-y-4">
-
-            <div className="bg-[#FFF7F3] rounded-xl p-4 border border-[#EFE1D7]">
-              <h3 className="font-semibold text-[#3B241C]">
+              <div className="rounded-xl bg-pink-50 p-5">
                 🧶 Handmade Crochet
-              </h3>
-            </div>
+              </div>
 
-            <div className="bg-[#FFF7F3] rounded-xl p-4 border border-[#EFE1D7]">
-              <h3 className="font-semibold text-[#3B241C]">
+              <div className="rounded-xl bg-pink-50 p-5">
                 🌸 Bridal Mehendi
-              </h3>
-            </div>
+              </div>
 
-            <div className="bg-[#FFF7F3] rounded-xl p-4 border border-[#EFE1D7]">
-              <h3 className="font-semibold text-[#3B241C]">
-                💐 Flower Bouquets
-              </h3>
-            </div>
+              <div className="rounded-xl bg-pink-50 p-5">
+                💐 Crochet Flower Bouquet
+              </div>
 
-            <div className="bg-[#FFF7F3] rounded-xl p-4 border border-[#EFE1D7]">
-              <h3 className="font-semibold text-[#3B241C]">
+              <div className="rounded-xl bg-pink-50 p-5">
                 🎁 Customized Gifts
-              </h3>
+              </div>
+
             </div>
 
-          </div>
+            <button className="w-full mt-8 bg-[#D98B9B] text-white py-4 rounded-xl hover:bg-[#C97B8D]">
+              Order Now
+            </button>
 
-          <a
-            href="#contact"
-            className="block mt-8 text-center rounded-xl bg-[#D98B9B] py-4 text-white uppercase tracking-widest font-semibold hover:bg-[#C97B8D] transition"
-          >
-            Order Now
-          </a>
-
-        </div>
-
-      </main>
-
-      {/* Collections */}
-
-      <section
-        id="collections"
-        className="container mx-auto px-6 py-20"
-      >
-        <p className="uppercase tracking-[0.25em] text-[#A88B80] text-xs mb-4">
-          Handmade Collection
-        </p>
-
-        <h2 className="font-serif text-5xl text-[#3B241C] mb-12">
-          Crafted with Love
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-          <div className="bg-[#FFFDFC] rounded-3xl p-6 border border-[#EFE1D7] shadow-lg hover:-translate-y-2 transition">
-            <img
-              src="/crochet.jpg"
-              alt="Crochet"
-              className="rounded-2xl h-64 w-full object-cover"
-            />
-            <h3 className="mt-6 text-2xl font-serif text-[#3B241C]">
-              Crochet
-            </h3>
-            <p className="mt-2 text-[#6B5247]">
-              Handmade plushies, flowers, keychains and gift items.
-            </p>
-          </div>
-
-          <div className="bg-[#FFFDFC] rounded-3xl p-6 border border-[#EFE1D7] shadow-lg hover:-translate-y-2 transition">
-            <img
-              src="/mehendi.jpg"
-              alt="Mehendi"
-              className="rounded-2xl h-64 w-full object-cover"
-            />
-            <h3 className="mt-6 text-2xl font-serif text-[#3B241C]">
-              Mehendi
-            </h3>
-            <p className="mt-2 text-[#6B5247]">
-              Elegant bridal and festive henna designs.
-            </p>
-          </div>
-
-          <div className="bg-[#FFFDFC] rounded-3xl p-6 border border-[#EFE1D7] shadow-lg hover:-translate-y-2 transition">
-            <img
-              src="/bouquet.jpg"
-              alt="Bouquet"
-              className="rounded-2xl h-64 w-full object-cover"
-            />
-            <h3 className="mt-6 text-2xl font-serif text-[#3B241C]">
-              Flower Bouquets
-            </h3>
-            <p className="mt-2 text-[#6B5247]">
-              Beautiful everlasting bouquets for every occasion.
-            </p>
           </div>
 
         </div>
 
       </section>
+
+      {/* Collection */}
+
+      <section className="container mx-auto px-6 pb-24">
+
+        <div className="text-center mb-14">
+
+          <p className="uppercase tracking-widest text-[#C97B8D]">
+            Handmade Collection
+          </p>
+
+          <h2 className="text-5xl mt-3 font-bold text-[#3B241C]">
+            Crafted with Love
+          </h2>
+
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+
+          <div className="bg-white rounded-3xl shadow-lg overflow-hidden hover:scale-105 transition">
+
+            <img
+              src="/crochet.jpg"
+              className="w-full h-72 object-cover"
+              alt="Crochet"
+            />
+
+            <div className="p-6">
+
+              <h3 className="text-2xl font-bold text-[#3B241C]">
+                Crochet
+              </h3>
+
+              <p className="mt-3 text-[#6B5247]">
+                Handmade dolls, flowers, keychains, bouquets and gifts.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div className="bg-white rounded-3xl shadow-lg overflow-hidden hover:scale-105 transition">
+
+            <img
+              src="/mehendi.jpg"
+              className="w-full h-72 object-cover"
+              alt="Mehendi"
+            />
+
+            <div className="p-6">
+
+              <h3 className="text-2xl font-bold text-[#3B241C]">
+                Mehendi
+              </h3>
+
+              <p className="mt-3 text-[#6B5247]">
+                Bridal, engagement and festive mehendi designs.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div className="bg-white rounded-3xl shadow-lg overflow-hidden hover:scale-105 transition">
+
+            <img
+              src="/bouquet.jpg"
+              className="w-full h-72 object-cover"
+              alt="Bouquet"
+            />
+
+            <div className="p-6">
+
+              <h3 className="text-2xl font-bold text-[#3B241C]">
+                Flower Bouquet
+              </h3>
+
+              <p className="mt-3 text-[#6B5247]">
+                Beautiful everlasting crochet flower bouquets.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
     </div>
   );
 }
