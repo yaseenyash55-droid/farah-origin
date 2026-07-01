@@ -1,28 +1,4 @@
 import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import Services from "@/components/Services";
-import Collections from "@/components/Collections";
-import About from "@/components/About";
-import Testimonials from "@/components/Testimonials";
-import Instagram from "@/components/Instagram";
-import CTA from "@/components/CTA";
-import Footer from "@/components/Footer";
-
-export default function Home() {
-  return (
-    <main className="bg-[#FFF8F4] overflow-x-hidden">
-      <Navbar />
-      <Hero />
-      <Services />
-      <Collections />
-      <About />
-      <Testimonials />
-      <Instagram />
-      <CTA />
-      <Footer />
-    </main>
-  );
-}
 
 export default function Home() {
   return (
