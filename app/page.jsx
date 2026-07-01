@@ -2,72 +2,194 @@ import Navbar from "@/components/Navbar";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-atelier-cream">
+    <div
+      className="min-h-screen"
+      style={{
+        background:
+          "linear-gradient(180deg,#FFFDFB 0%,#FFF8F3 40%,#FFF3EE 100%)",
+      }}
+    >
       <Navbar />
-      
-      {/* Editorial Hero Section */}
-      <main className="container mx-auto px-6 pt-32 pb-20 md:pt-48 flex flex-col md:flex-row items-start justify-between">
-        
-        {/* Left Content Area */}
+
+      {/* Hero Section */}
+      <main className="container mx-auto px-6 pt-32 pb-20 md:pt-44 flex flex-col lg:flex-row items-center justify-between gap-16">
+
+        {/* Left Content */}
         <div className="max-w-2xl">
-          {/* Top Badge */}
-          <div className="inline-flex items-center gap-2 border border-atelier-dark rounded-full px-4 py-1.5 mb-10">
-            <span className="w-1.5 h-1.5 rounded-full bg-atelier-dark"></span>
-            <span className="text-[10px] md:text-xs font-semibold tracking-[0.2em] uppercase text-atelier-dark">
-              Erode Boutique Atelier
+
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 bg-[#FFF7F3] border border-[#E9D9CF] rounded-full px-5 py-2 mb-10 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-[#D98B9B]"></span>
+
+            <span className="text-xs tracking-[0.25em] uppercase font-semibold text-[#6B5247]">
+              Handmade with Love
             </span>
           </div>
 
-          {/* Main Heading styled exactly like the screenshot */}
-          <h1 className="font-serif text-5xl md:text-7xl leading-[1.1] mb-8 text-atelier-dark">
-            Aesthetic <br />
-            <span className="text-atelier-rose italic font-medium">Crochet &</span> <br />
+          {/* Heading */}
+
+          <h1 className="font-serif text-5xl md:text-7xl leading-tight text-[#3B241C]">
+            Customized
+            <br />
+
+            <span className="text-[#D98B9B] italic">
+              Crochet &
+            </span>
+
+            <br />
+
             Henna
           </h1>
 
-          {/* Subtext */}
-          <p className="text-sm md:text-base text-atelier-dark/80 max-w-md leading-relaxed font-light mb-12">
-            Crafting premium luxury solutions at the intersection of beautiful cotton fibers and intricate skin art stains. Designed precisely for landmark moments, boutique gifts, and bridal celebrations.
+          {/* Brush Text */}
+
+          <div className="inline-block mt-6 px-6 py-2 rounded-md bg-[#F8CCD3]">
+            <span className="text-3xl font-serif text-[#3B241C] italic">
+              by Farah Origin
+            </span>
+          </div>
+
+          {/* Description */}
+
+          <p className="mt-8 max-w-lg leading-8 text-[#6B5247]">
+            Handmade crochet gifts, elegant bridal mehendi designs,
+            customized bouquets, and personalized creations crafted with
+            love for birthdays, weddings, baby showers and every special
+            occasion.
           </p>
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-6">
-            <a href="#collections" className="bg-atelier-rose text-white px-8 py-4 rounded text-xs font-bold tracking-widest uppercase hover:bg-atelier-rose/90 transition-colors flex items-center gap-3">
-              View Showcase
-              <span className="text-lg leading-none">↗</span>
+          {/* Buttons */}
+
+          <div className="flex flex-wrap items-center gap-5 mt-12">
+
+            <a
+              href="#collections"
+              className="px-8 py-4 rounded-lg bg-[#D98B9B] text-white font-semibold uppercase tracking-widest shadow-lg hover:bg-[#C97B8D] transition"
+            >
+              View Collection
             </a>
-            <div className="flex items-center gap-3 border-l border-atelier-dark/20 pl-6">
-              <span className="w-1 h-6 bg-atelier-rose block"></span>
-              <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-atelier-dark/60">
-                Shipping Pan-India
-              </span>
-            </div>
+
+            <a
+              href="#contact"
+              className="px-8 py-4 rounded-lg border border-[#D98B9B] text-[#3B241C] font-semibold uppercase tracking-widest hover:bg-[#FFF0F3] transition"
+            >
+              Contact Us
+            </a>
+
           </div>
         </div>
 
-        {/* Right Side - The floating menu card from your screenshot */}
-        <div className="hidden md:block mt-12 bg-white p-8 rounded-xl shadow-2xl border border-atelier-border w-80 relative z-10">
-          <div className="text-center mb-6">
-             <p className="text-[10px] text-atelier-dark/50 tracking-widest uppercase mb-2">Est. 2026</p>
-             <h3 className="font-serif text-2xl text-atelier-dark">Farah Origin</h3>
+        {/* Right Card */}
+
+        <div className="bg-[#FFFDFC] border border-[#E9D9CF] rounded-3xl p-8 shadow-2xl w-full max-w-sm">
+
+          <p className="text-center uppercase tracking-[0.3em] text-xs text-[#A88B80] mb-2">
+            Farah Origin
+          </p>
+
+          <h2 className="text-3xl font-serif text-center text-[#3B241C] mb-8">
+            Our Services
+          </h2>
+
+          <div className="space-y-4">
+
+            <div className="bg-[#FFF7F3] rounded-xl p-4 border border-[#EFE1D7]">
+              <h3 className="font-semibold text-[#3B241C]">
+                🧶 Handmade Crochet
+              </h3>
+            </div>
+
+            <div className="bg-[#FFF7F3] rounded-xl p-4 border border-[#EFE1D7]">
+              <h3 className="font-semibold text-[#3B241C]">
+                🌸 Bridal Mehendi
+              </h3>
+            </div>
+
+            <div className="bg-[#FFF7F3] rounded-xl p-4 border border-[#EFE1D7]">
+              <h3 className="font-semibold text-[#3B241C]">
+                💐 Flower Bouquets
+              </h3>
+            </div>
+
+            <div className="bg-[#FFF7F3] rounded-xl p-4 border border-[#EFE1D7]">
+              <h3 className="font-semibold text-[#3B241C]">
+                🎁 Customized Gifts
+              </h3>
+            </div>
+
           </div>
-          <div className="space-y-4 text-xs font-semibold tracking-widest text-atelier-dark uppercase mb-8">
-            <p className="border-b border-dashed border-atelier-border pb-2">01 / Custom Crochet</p>
-            <p className="border-b border-dashed border-atelier-border pb-2">02 / Bridal Henna</p>
-            <p className="border-b border-dashed border-atelier-border pb-2">03 / Forever Florals</p>
-          </div>
-          <a href="#contact" className="block w-full text-center bg-atelier-rose text-white py-3 text-[10px] font-bold tracking-widest uppercase rounded hover:bg-atelier-rose/90 transition-colors">
-            Tailored With Care
+
+          <a
+            href="#contact"
+            className="block mt-8 text-center rounded-xl bg-[#D98B9B] py-4 text-white uppercase tracking-widest font-semibold hover:bg-[#C97B8D] transition"
+          >
+            Order Now
           </a>
+
         </div>
 
       </main>
 
-      {/* Curated Collections Section Preview */}
-      <section className="container mx-auto px-6 py-20">
-         <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-atelier-dark/50 mb-4">Curated Collections</h4>
-         <h2 className="font-serif text-4xl text-atelier-dark mb-12">The Atelier Catalog</h2>
-         {/* Insert your Gallery component here */}
+      {/* Collections */}
+
+      <section
+        id="collections"
+        className="container mx-auto px-6 py-20"
+      >
+        <p className="uppercase tracking-[0.25em] text-[#A88B80] text-xs mb-4">
+          Handmade Collection
+        </p>
+
+        <h2 className="font-serif text-5xl text-[#3B241C] mb-12">
+          Crafted with Love
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+          <div className="bg-[#FFFDFC] rounded-3xl p-6 border border-[#EFE1D7] shadow-lg hover:-translate-y-2 transition">
+            <img
+              src="/crochet.jpg"
+              alt="Crochet"
+              className="rounded-2xl h-64 w-full object-cover"
+            />
+            <h3 className="mt-6 text-2xl font-serif text-[#3B241C]">
+              Crochet
+            </h3>
+            <p className="mt-2 text-[#6B5247]">
+              Handmade plushies, flowers, keychains and gift items.
+            </p>
+          </div>
+
+          <div className="bg-[#FFFDFC] rounded-3xl p-6 border border-[#EFE1D7] shadow-lg hover:-translate-y-2 transition">
+            <img
+              src="/mehendi.jpg"
+              alt="Mehendi"
+              className="rounded-2xl h-64 w-full object-cover"
+            />
+            <h3 className="mt-6 text-2xl font-serif text-[#3B241C]">
+              Mehendi
+            </h3>
+            <p className="mt-2 text-[#6B5247]">
+              Elegant bridal and festive henna designs.
+            </p>
+          </div>
+
+          <div className="bg-[#FFFDFC] rounded-3xl p-6 border border-[#EFE1D7] shadow-lg hover:-translate-y-2 transition">
+            <img
+              src="/bouquet.jpg"
+              alt="Bouquet"
+              className="rounded-2xl h-64 w-full object-cover"
+            />
+            <h3 className="mt-6 text-2xl font-serif text-[#3B241C]">
+              Flower Bouquets
+            </h3>
+            <p className="mt-2 text-[#6B5247]">
+              Beautiful everlasting bouquets for every occasion.
+            </p>
+          </div>
+
+        </div>
+
       </section>
     </div>
   );
