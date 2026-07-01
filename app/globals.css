@@ -1,13 +1,5 @@
-/* stylelint-disable-next-line at-rule-no-unknown */
-/* stylelint-disable-next-line csstools/no-unknown-at-rules */
-@tailwind base;
-/* stylelint-disable-next-line at-rule-no-unknown */
-/* stylelint-disable-next-line csstools/no-unknown-at-rules */
-@tailwind components;
-/* stylelint-disable-next-line at-rule-no-unknown */
-/* stylelint-disable-next-line csstools/no-unknown-at-rules */
-@tailwind utilities;
-
+@import "tailwindcss";
+  
 /* ================================
    Farah Origin Theme Colors
 ================================ */
