@@ -25,11 +25,11 @@ const OrderConfirmationPage = () => {
       },
     ],
     shippingAddress: {
-      name: 'John Doe',
-      addressLine1: '123 Craft Lane',
-      city: 'Artisanville',
-      state: 'CA',
-      zip: '98765',
+      name: 'Yash',
+      addressLine1: 'coimbatore, Tamilnadu',
+      city: 'mettupalam',
+      state: 'TN',
+      zip: '641305s',
     },
     paymentMethod: '**** **** **** 4242',
   };
