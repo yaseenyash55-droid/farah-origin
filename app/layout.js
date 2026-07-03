@@ -1,6 +1,7 @@
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "../components/ThemeProvider";
+import { CartProvider } from "../context/CartContext";
 
 // Load the elegant Serif font for headings
 const playfair = Playfair_Display({ 
@@ -24,9 +25,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${playfair.variable} font-sans bg-background text-foreground`}>
-        <ThemeProvider>
-          {children}
-        </ThemeProvider>
+        <CartProvider>
+          <ThemeProvider>
+            {children}
+          </ThemeProvider>
+        </CartProvider>
       </body>
     </html>
   );
