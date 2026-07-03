@@ -20,3 +20,6 @@ module.exports = {
   },
   plugins: [],
 };
+<div className="bg-red-500 text-white p-5">
+  Tailwind Test
+</div>

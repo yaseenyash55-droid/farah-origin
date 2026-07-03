@@ -1,10 +1,6 @@
-
 /* @nolint */
-/* stylelint-disable-next-line */
 @tailwind base;
-/* stylelint-disable-next-line */
 @tailwind components;
-/* stylelint-disable-next-line */
 @tailwind utilities;
 
 @layer base {
@@ -70,8 +66,11 @@
     --ring: 349 80% 56%;
   }
 
+  /* Use explicit properties based on your CSS variables so the file doesn't depend
+     on custom Tailwind utilities (e.g. bg-background, border-border) being present. */
   * {
-    @apply border-border;
+    box-sizing: border-box;
+    border-color: hsl(var(--border));
   }
 
   html {
@@ -79,15 +78,12 @@
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-family:
-      Georgia,
-      "Times New Roman",
-      serif;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: Georgia, "Times New Roman", serif;
     overflow-x: hidden;
   }
 }
-
 
 /* ================================
    Container
@@ -107,10 +103,8 @@
 
 .glass-nav {
   background: rgba(255, 253, 251, 0.82);
-
   backdrop-filter: blur(14px);
-
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid hsl(var(--border));
 }
 
 /* ================================
@@ -119,9 +113,7 @@
 
 .grid-gallery {
   display: grid;
-
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-
   gap: 2rem;
 }
 
@@ -163,4 +155,4 @@
   .mobile-menu-open {
     overflow: hidden;
   }
-}
+}   
