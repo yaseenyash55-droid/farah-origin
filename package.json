@@ -4,11 +4,19 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --no-lint",
+    "build:static": "next build --no-lint",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "apk:sync": "npx cap sync android",
+    "apk:build": "cd android && gradlew assembleRelease",
+    "apk:dev": "cd android && gradlew assembleDebug",
+    "apk:full": "npm run build:static && npm run apk:sync && cd android && gradlew assembleRelease"
   },
   "dependencies": {
+    "@capacitor/android": "^8.4.1",
+    "@capacitor/cli": "^8.4.1",
+    "@capacitor/core": "^8.4.1",
     "framer-motion": "^12.42.2",
     "lucide-react": "^0.292.0",
     "next": "14.2.3",

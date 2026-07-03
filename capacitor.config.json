@@ -1,0 +1,15 @@
+{
+  "appId": "com.farahorigin.app",
+  "appName": "Farah Origin",
+  "webDir": "out",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "server": {
+    "hostname": "farah-origin",
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": true,
+    "backgroundColor": "#fcf6f2"
+  }
+}
