@@ -17,19 +17,18 @@ export function ThemeToggleButton() {
     return (
         <button aria-label="Toggle theme" disabled>
             <Sun className="h-6 w-6" />
-            <span className="sr-only">Toggle theme</span>
         </button>
     );
   }
 
+  const isDark = resolvedTheme === "dark";
+
   return (
     <button
-      onClick={() => (resolvedTheme === "dark" ? setTheme("light") : setTheme("dark"))}
+      onClick={() => (isDark ? setTheme("light") : setTheme("dark"))}
       aria-label="Toggle theme"
     >
-      <Sun className="h-6 w-6 dark:hidden" />
-      <Moon className="hidden h-6 w-6 dark:block" />
-      <span className="sr-only">Toggle theme</span>
+      {isDark ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
     </button>
   );
 }
