@@ -65,25 +65,25 @@
     --input: 24 9.8% 23%;
     --ring: 349 80% 56%;
   }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family:
+      Georgia,
+      "Times New Roman",
+      serif;
+    overflow-x: hidden;
+  }
 }
 
-
-/* ================================
-   Reset
-================================ */
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  @apply bg-background text-foreground;
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-  overflow-x: hidden;
-}
 
 /* ================================
    Container

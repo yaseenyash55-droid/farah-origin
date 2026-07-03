@@ -2,7 +2,7 @@ import Navbar from "@/components/Navbar";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#FFF8F3]">
+    <div className="min-h-screen">
 
       <Navbar />
 
@@ -14,27 +14,27 @@ export default function Home() {
           {/* Left Content */}
           <div>
 
-            <span className="inline-block px-5 py-2 rounded-full bg-pink-100 text-[#C97B8D] font-semibold tracking-widest uppercase text-xs mb-8">
+            <span className="inline-block px-5 py-2 rounded-full bg-secondary text-secondary-foreground font-semibold tracking-widest uppercase text-xs mb-8">
               Handmade with Love
             </span>
 
-            <h1 className="text-6xl lg:text-7xl font-bold leading-tight text-[#3B241C]">
+            <h1 className="text-6xl lg:text-7xl font-bold leading-tight text-foreground">
               Customized
               <br />
-              <span className="text-[#D98B9B] italic">
+              <span className="text-primary italic">
                 Crochet &
               </span>
               <br />
               Henna
             </h1>
 
-            <div className="inline-block mt-6 bg-pink-200 px-6 py-3 rounded-xl">
-              <p className="text-3xl italic text-[#3B241C]">
+            <div className="inline-block mt-6 bg-secondary px-6 py-3 rounded-xl">
+              <p className="text-3xl italic text-foreground">
                 by Farah Origin
               </p>
             </div>
 
-            <p className="mt-8 text-lg text-[#6B5247] leading-8 max-w-xl">
+            <p className="mt-8 text-lg text-muted-foreground leading-8 max-w-xl">
               Handmade crochet gifts, elegant mehendi, customized bouquets,
               personalized gifts and premium handcrafted creations made with
               love for every special occasion.
@@ -42,11 +42,11 @@ export default function Home() {
 
             <div className="mt-10 flex gap-4">
 
-              <button className="bg-[#D98B9B] text-white px-8 py-4 rounded-xl hover:bg-[#C97B8D] transition">
+              <button className="bg-primary text-primary-foreground px-8 py-4 rounded-xl hover:bg-primary/90 transition">
                 View Collection
               </button>
 
-              <button className="border border-[#D98B9B] text-[#3B241C] px-8 py-4 rounded-xl hover:bg-pink-50 transition">
+              <button className="border border-primary text-foreground px-8 py-4 rounded-xl hover:bg-secondary transition">
                 Contact Us
               </button>
 
@@ -56,33 +56,33 @@ export default function Home() {
 
           {/* Right Card */}
 
-          <div className="bg-white rounded-3xl shadow-xl border border-pink-100 p-10">
+          <div className="bg-card rounded-3xl shadow-xl border border-border p-10">
 
-            <h2 className="text-4xl text-center font-bold text-[#3B241C]">
+            <h2 className="text-4xl text-center font-bold text-card-foreground">
               Our Services
             </h2>
 
             <div className="mt-8 space-y-4">
 
-              <div className="rounded-xl bg-pink-50 p-5">
+              <div className="rounded-xl bg-secondary p-5">
                 🧶 Handmade Crochet
               </div>
 
-              <div className="rounded-xl bg-pink-50 p-5">
+              <div className="rounded-xl bg-secondary p-5">
                 🌸 Bridal Mehendi
               </div>
 
-              <div className="rounded-xl bg-pink-50 p-5">
+              <div className="rounded-xl bg-secondary p-5">
                 💐 Crochet Flower Bouquet
               </div>
 
-              <div className="rounded-xl bg-pink-50 p-5">
+              <div className="rounded-xl bg-secondary p-5">
                 🎁 Customized Gifts
               </div>
 
             </div>
 
-            <button className="w-full mt-8 bg-[#D98B9B] text-white py-4 rounded-xl hover:bg-[#C97B8D]">
+            <button className="w-full mt-8 bg-primary text-primary-foreground py-4 rounded-xl hover:bg-primary/90">
               Order Now
             </button>
 
@@ -98,11 +98,11 @@ export default function Home() {
 
         <div className="text-center mb-14">
 
-          <p className="uppercase tracking-widest text-[#C97B8D]">
+          <p className="uppercase tracking-widest text-primary">
             Handmade Collection
           </p>
 
-          <h2 className="text-5xl mt-3 font-bold text-[#3B241C]">
+          <h2 className="text-5xl mt-3 font-bold text-foreground">
             Crafted with Love
           </h2>
 
@@ -110,7 +110,7 @@ export default function Home() {
 
         <div className="grid md:grid-cols-3 gap-8">
 
-          <div className="bg-white rounded-3xl shadow-lg overflow-hidden hover:scale-105 transition">
+          <div className="bg-card rounded-3xl shadow-lg overflow-hidden hover:scale-105 transition">
 
             <img
               src="/crochet.jpg"
@@ -120,11 +120,11 @@ export default function Home() {
 
             <div className="p-6">
 
-              <h3 className="text-2xl font-bold text-[#3B241C]">
+              <h3 className="text-2xl font-bold text-card-foreground">
                 Crochet
               </h3>
 
-              <p className="mt-3 text-[#6B5247]">
+              <p className="mt-3 text-muted-foreground">
                 Handmade dolls, flowers, keychains, bouquets and gifts.
               </p>
 
@@ -132,7 +132,7 @@ export default function Home() {
 
           </div>
 
-          <div className="bg-white rounded-3xl shadow-lg overflow-hidden hover:scale-105 transition">
+          <div className="bg-card rounded-3xl shadow-lg overflow-hidden hover:scale-105 transition">
 
             <img
               src="/mehendi.jpg"
@@ -142,11 +142,11 @@ export default function Home() {
 
             <div className="p-6">
 
-              <h3 className="text-2xl font-bold text-[#3B241C]">
+              <h3 className="text-2xl font-bold text-card-foreground">
                 Mehendi
               </h3>
 
-              <p className="mt-3 text-[#6B5247]">
+              <p className="mt-3 text-muted-foreground">
                 Bridal, engagement and festive mehendi designs.
               </p>
 
@@ -154,7 +154,7 @@ export default function Home() {
 
           </div>
 
-          <div className="bg-white rounded-3xl shadow-lg overflow-hidden hover:scale-105 transition">
+          <div className="bg-card rounded-3xl shadow-lg overflow-hidden hover:scale-105 transition">
 
             <img
               src="/bouquet.jpg"
@@ -164,11 +164,11 @@ export default function Home() {
 
             <div className="p-6">
 
-              <h3 className="text-2xl font-bold text-[#3B241C]">
+              <h3 className="text-2xl font-bold text-card-foreground">
                 Flower Bouquet
               </h3>
 
-              <p className="mt-3 text-[#6B5247]">
+              <p className="mt-3 text-muted-foreground">
                 Beautiful everlasting crochet flower bouquets.
               </p>
 
