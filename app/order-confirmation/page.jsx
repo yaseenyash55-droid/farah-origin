@@ -27,7 +27,7 @@ const OrderConfirmationPage = () => {
     shippingAddress: {
       name: 'Yash',
       addressLine1: 'coimbatore, Tamilnadu',
-      city: 'mettupalam',
+      city: 'mettupalayam',
       state: 'TN',
       zip: '641305s',
     },
