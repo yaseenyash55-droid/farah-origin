@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { ThemeToggleButton } from "./ThemeToggleButton";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +20,7 @@ export default function Navbar() {
           <a href="https://wa.me/919999999999" target="_blank" rel="noreferrer" className="bg-[var(--accent)] text-[#0d0c0c] px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-[var(--accent-hover)] transition-all">
             Inquire Now
           </a>
+          <ThemeToggleButton />
         </div>
 
         {/* Mobile Toggle Button */}

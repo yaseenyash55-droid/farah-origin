@@ -1,59 +1,87 @@
 
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
-  
-/* ================================
-   Farah Origin Theme Colors
-================================ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #fffdfb;
-  --foreground: #3b241c;
+@layer base {
+  :root {
+    --background: 20 20% 98%;
+    --foreground: 20 14.3% 10%;
 
-  --primary: #d98b9b;
-  --primary-hover: #c97b8d;
+    --card: 0 0% 100%;
+    --card-foreground: 20 14.3% 10%;
 
-  --secondary: #f8ccd3;
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 14.3% 10%;
 
-  --card: #fffdfc;
+    --primary: 349 80% 56%;
+    --primary-foreground: 355.7 100% 97.3%;
 
-  --border: #e9d9cf;
+    --secondary: 349 80% 90%;
+    --secondary-foreground: 349 80% 40%;
 
-  --text: #6b5247;
+    --muted: 20 5.9% 90%;
+    --muted-foreground: 20 8.3% 40%;
 
-  --muted: #a88b80;
+    --accent: 20 5.9% 90%;
+    --accent-foreground: 20 98% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 20 5.9% 90%;
+    --input: 20 5.9% 90%;
+    --ring: 20 11.2% 50%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 20 14.3% 10%;
+    --foreground: 0 0% 95%;
+
+    --card: 24 9.8% 12%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 24 9.8% 12%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 349 80% 56%;
+    --primary-foreground: 355.7 100% 97.3%;
+
+    --secondary: 349 80% 30%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 24 9.8% 23%;
+    --muted-foreground: 24 9.8% 60%;
+
+    --accent: 24 9.8% 23%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 24 9.8% 23%;
+    --input: 24 9.8% 23%;
+    --ring: 349 80% 56%;
+  }
 }
+
 
 /* ================================
    Reset
 ================================ */
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background: linear-gradient(
-    180deg,
-    #fffdfb 0%,
-    #fff8f3 45%,
-    #fff3ee 100%
-  );
-
-  color: var(--foreground);
-
+  @apply bg-background text-foreground;
   font-family:
     Georgia,
     "Times New Roman",
     serif;
-
   overflow-x: hidden;
 }
 
