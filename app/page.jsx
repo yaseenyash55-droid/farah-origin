@@ -19,7 +19,7 @@ export default function Home() {
               Handmade with Love
             </span>
 
-            <h1 className="text-6xl lg:text-7xl font-bold leading-tight text-foreground">
+            <h1 className="text-6xl lg:text-7xl font-playfair font-bold leading-tight text-foreground">
               Customized
               <br />
               <span className="text-primary italic">
