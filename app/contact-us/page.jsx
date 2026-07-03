@@ -31,7 +31,7 @@ const ContactUsPage = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold">WhatsApp</h3>
-                  <a href="https://wa.me/919999999999" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-primary transition">+91 99999 99999</a>
+                  <a href="https://wa.me/+919344665042" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-primary transition">+91 9344665042</a>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -40,7 +40,8 @@ const ContactUsPage = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold">Studio Location</h3>
-                  <p className="text-muted-foreground">Jaipur, Rajasthan, India (By Appointment Only)</p>
+                  <p className="text-muted-foreground">Mettupalayam,coimbatore,Tamilnadu,India</p>
+                  <p className="text-muted-foreground"> India (By Appointment Only)</p>
                 </div>
               </div>
             </div>
