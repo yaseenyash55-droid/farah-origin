@@ -1,41 +1,14 @@
 "use client";
-import React, { useState } from 'react';
+import React from 'react';
+import { useCart } from '../../context/CartContext';
 import { ShoppingCart, Plus, Minus, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 
-const initialCartItems = [
-  {
-    id: 1,
-    name: 'Custom Crochet Top',
-    description: 'Color: Lilac, Size: M',
-    price: 75.00,
-    quantity: 1,
-    image: '/crochet.jpg',
-  },
-  {
-    id: 2,
-    name: 'Henna Garden Sleeve',
-    description: 'Intricate floral design',
-    price: 120.00,
-    quantity: 1,
-    image: '/mehendi.jpg',
-  },
-];
-
 const CartPage = () => {
-  const [cartItems, setCartItems] = useState(initialCartItems);
-
-  const handleQuantityChange = (id, newQuantity) => {
-    if (newQuantity < 1) return;
-    setCartItems(cartItems.map(item => item.id === id ? { ...item, quantity: newQuantity } : item));
-  };
-
-  const handleRemoveItem = (id) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
-  };
+  const { items: cartItems, updateQuantity, removeFromCart } = useCart();
 
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const shipping = 10.00;
+  const shipping = subtotal > 0 ? 10.00 : 0;
   const total = subtotal + shipping;
 
   return (
@@ -56,16 +29,15 @@ const CartPage = () => {
                       <img src={item.image} alt={item.name} className="w-24 h-24 object-cover rounded-md" />
                       <div className="flex-grow">
                         <h3 className="font-semibold text-lg">{item.name}</h3>
-                        <p className="text-sm text-muted-foreground">{item.description}</p>
-                        <p className="text-lg font-bold text-primary mt-2">${item.price.toFixed(2)}</p>
+                        <p className="text-sm text-muted-foreground">${item.price.toFixed(2)}</p>
                       </div>
                       <div className="flex items-center gap-4">
                         <div className="flex items-center border border-border rounded-md">
-                          <button onClick={() => handleQuantityChange(item.id, item.quantity - 1)} className="p-2 hover:bg-muted transition-colors"><Minus size={16} /></button>
+                          <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="p-2 hover:bg-muted transition-colors"><Minus size={16} /></button>
                           <span className="px-4 text-lg">{item.quantity}</span>
-                          <button onClick={() => handleQuantityChange(item.id, item.quantity + 1)} className="p-2 hover:bg-muted transition-colors"><Plus size={16} /></button>
+                          <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="p-2 hover:bg-muted transition-colors"><Plus size={16} /></button>
                         </div>
-                        <button onClick={() => handleRemoveItem(item.id)} className="text-muted-foreground hover:text-destructive transition-colors">
+                        <button onClick={() => removeFromCart(item.id)} className="text-muted-foreground hover:text-destructive transition-colors">
                           <Trash2 size={20} />
                         </button>
                       </div>
@@ -105,7 +77,6 @@ const CartPage = () => {
                   <button 
                     className="w-full mt-8 bg-primary text-primary-foreground py-3 rounded-full font-semibold hover:bg-primary/90 transition-all text-lg disabled:bg-muted disabled:cursor-not-allowed"
                     disabled={cartItems.length === 0}
-                    onClick={() => setCartItems([])}
                   >
                     Proceed to Checkout
                   </button>
