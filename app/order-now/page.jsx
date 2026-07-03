@@ -1,4 +1,6 @@
+"use client";
 import React from 'react';
+import Link from 'next/link';
 
 const OrderNowPage = () => {
   return (
@@ -10,7 +12,7 @@ const OrderNowPage = () => {
             Let us craft something unique for you. Fill out the form below to begin your custom order inquiry.
           </p>
 
-          <form className="space-y-8">
+          <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
                 <label htmlFor="fullName" className="text-sm font-medium">Full Name</label>
@@ -44,9 +46,9 @@ const OrderNowPage = () => {
             </div>
 
             <div className="text-center">
-              <button type="submit" className="bg-primary text-primary-foreground px-10 py-3 rounded-full font-semibold hover:bg-primary/90 transition-all text-lg transform hover:scale-105">
+              <Link href="/inquiry-sent" className="bg-primary text-primary-foreground px-10 py-3 rounded-full font-semibold hover:bg-primary/90 transition-all text-lg transform hover:scale-105 inline-block">
                 Send Inquiry
-              </button>
+              </Link>
             </div>
           </form>
         </div>
