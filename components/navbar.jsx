@@ -30,7 +30,7 @@ export default function Navbar() {
           ))}
           <Link href="/order-now" className="text-sm hover:text-[var(--accent)] transition-colors">Order Now</Link>
           <Link href="/cart" className="text-sm hover:text-[var(--accent)] transition-colors">Cart</Link>
-          <a href="https://wa.me/919999999999" target="_blank" rel="noreferrer" className="bg-[var(--accent)] text-[#0d0c0c] px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-[var(--accent-hover)] transition-all">
+          <a href="https://wa.me/+919344665042" target="_blank" rel="noreferrer" className="bg-[var(--accent)] text-[#0d0c0c] px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-[var(--accent-hover)] transition-all">
             Inquire Now
           </a>
           <ThemeToggleButton />
