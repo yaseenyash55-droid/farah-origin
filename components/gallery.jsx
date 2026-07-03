@@ -11,7 +11,7 @@ export default function Gallery({ showTitle = true }) {
 
   const openWhatsAppOrder = (itemTitle) => {
     const text = encodeURIComponent(`Hi Farah Origin, I am interested in exploring or ordering the item: "${itemTitle}". Could you provide details on pricing and availability?`);
-    window.open(`https://wa.me/919999999999?text=${text}`, "_blank");
+    window.open(`https://wa.me/+919344665042?text=${text}`, "_blank");
   };
 
   return (
