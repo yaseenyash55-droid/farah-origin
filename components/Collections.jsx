@@ -22,21 +22,21 @@ const collectionItems = [
   },
   {
     title: 'Custom Apparel',
-    description: 'One-of-a-kind crochet tops, bags, and accessories designed to match your style.',
-    image: '/crochet.jpg', // Placeholder, to be replaced
-    href: '/gallery?category=crochet',
+    description: 'Personalized crochet clothing, accessories, and unique wearable art tailored to your style.',
+    image: '/custom apparel.jpg',
+    href: '/gallery?category=apparel',
   },
   {
     title: 'Amigurumi',
-    description: 'Adorable and cuddly crochet toys, perfect for children and the young at heart.',
-    image: '/crochet.jpg', // Placeholder
-    href: '/gallery?category=crochet',
+    description: 'Adorable, hand-stitched crochet plushies and figurines, perfect for gifts or collectibles.',
+    image: '/amigurumi.jpg',
+    href: '/gallery?category=amigurumi',
   },
   {
     title: 'Home Decor',
-    description: 'Unique crochet pieces to add a touch of handmade warmth to your living space.',
-    image: '/crochet.jpg', // Placeholder
-    href: '/gallery?category=crochet',
+    description: 'Handmade crochet items like blankets, cushions, and wall art to beautify your living space.',
+    image: '/home decor.jpg',
+    href: '/gallery?category=homedecor',
   },
 ];
 
