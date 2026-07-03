@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import Navbar from "@/components/Navbar";
 
 export default function Home() {
@@ -42,13 +43,13 @@ export default function Home() {
 
             <div className="mt-10 flex gap-4">
 
-              <button className="bg-primary text-primary-foreground px-8 py-4 rounded-xl hover:bg-primary/90 transition">
+              <Link href="/view-collection" className="bg-primary text-primary-foreground px-8 py-4 rounded-xl hover:bg-primary/90 transition">
                 View Collection
-              </button>
+              </Link>
 
-              <button className="border border-primary text-foreground px-8 py-4 rounded-xl hover:bg-secondary transition">
+              <Link href="/contact-us" className="border border-primary text-foreground px-8 py-4 rounded-xl hover:bg-secondary transition">
                 Contact Us
-              </button>
+              </Link>
 
             </div>
 
@@ -82,9 +83,9 @@ export default function Home() {
 
             </div>
 
-            <button className="w-full mt-8 bg-primary text-primary-foreground py-4 rounded-xl hover:bg-primary/90">
+            <Link href="/order-now" className="w-full block text-center mt-8 bg-primary text-primary-foreground py-4 rounded-xl hover:bg-primary/90">
               Order Now
-            </button>
+            </Link>
 
           </div>
 
