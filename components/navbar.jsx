@@ -1,11 +1,21 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { ThemeToggleButton } from "./ThemeToggleButton";
 import Link from "next/link";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+
+  // Lock body scroll when mobile drawer is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+    return () => document.body.classList.remove("overflow-hidden");
+  }, [isOpen]);
 
   const navLinks = [
     { href: "/gallery", label: "Gallery" },
@@ -42,17 +52,25 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Drawer Overlay */}
+      {/* Mobile Backdrop */}
       {isOpen && (
-        <div className="md:hidden fixed top-20 left-0 w-full h-[calc(100vh-5rem)] bg-[var(--background)] flex flex-col items-center justify-center space-y-8 text-xl animate-fadeIn">
+        <div
+          className="md:hidden fixed inset-0 bg-black/50 z-40"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      {/* Mobile Left Drawer */}
+      {isOpen && (
+        <div className="md:hidden fixed top-20 left-0 w-72 h-[calc(100vh-5rem)] bg-[var(--background)] flex flex-col items-start justify-start pt-8 pl-6 space-y-8 text-xl shadow-2xl z-50 animate-slideIn">
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} onClick={() => setIsOpen(false)} className="hover:text-[var(--accent)]">
+            <Link key={link.href} href={link.href} onClick={() => setIsOpen(false)} className="hover:text-[var(--accent)] transition-colors">
               {link.label}
             </Link>
           ))}
-          <Link href="/order-now" onClick={() => setIsOpen(false)} className="hover:text-[var(--accent)]">Order Now</Link>
-          <Link href="/cart" onClick={() => setIsOpen(false)} className="hover:text-[var(--accent)]">Cart</Link>
-          <a href="https://wa.me/+919344665042" target="_blank" rel="noreferrer" onClick={() => setIsOpen(false)} className="bg-[var(--accent)] text-[#0d0c0c] px-8 py-3 rounded-full font-semibold">
+          <Link href="/order-now" onClick={() => setIsOpen(false)} className="hover:text-[var(--accent)] transition-colors">Order Now</Link>
+          <Link href="/cart" onClick={() => setIsOpen(false)} className="hover:text-[var(--accent)] transition-colors">Cart</Link>
+          <a href="https://wa.me/+919344665042" target="_blank" rel="noreferrer" onClick={() => setIsOpen(false)} className="bg-[var(--accent)] text-[#0d0c0c] px-8 py-3 rounded-full font-semibold hover:bg-[var(--accent-hover)] transition-all">
             Inquire Now
           </a>
         </div>

@@ -168,7 +168,3 @@ Alternatively, Tailwind's built-in transition utilities could be used with `tran
 4. **`components/ThemeToggleButton.jsx`** — Understand the hydration-safe pattern used for client-side features
 5. **`context/CartContext.js`** — See the state management pattern (useReducer + Context)
 6. **`tailwind.config.js`** — How CSS variables are wired into Tailwind utility classes
-
----
-
-**Note**: I am in **Explore Mode** — I can analyze and document the codebase, but I cannot make code changes. To implement the mobile drawer change (switching from full-screen centered overlay to left-side slide-in drawer), please switch to **Act Mode** using the mode selector at the bottom of the chat. My analysis above provides the exact code changes needed in `components/Navbar.jsx` and `app/globals.css` — those will carry over as context for implementation.
