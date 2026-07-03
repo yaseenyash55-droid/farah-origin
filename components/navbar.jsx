@@ -52,7 +52,7 @@ export default function Navbar() {
           ))}
           <Link href="/order-now" onClick={() => setIsOpen(false)} className="hover:text-[var(--accent)]">Order Now</Link>
           <Link href="/cart" onClick={() => setIsOpen(false)} className="hover:text-[var(--accent)]">Cart</Link>
-          <a href="https://wa.me/919999999999" target="_blank" rel="noreferrer" onClick={() => setIsOpen(false)} className="bg-[var(--accent)] text-[#0d0c0c] px-8 py-3 rounded-full font-semibold">
+          <a href="https://wa.me/+919344665042" target="_blank" rel="noreferrer" onClick={() => setIsOpen(false)} className="bg-[var(--accent)] text-[#0d0c0c] px-8 py-3 rounded-full font-semibold">
             Inquire Now
           </a>
         </div>
