@@ -91,21 +91,13 @@
 
 .container {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1440px;
   margin: auto;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
 }
 
-/* ================================
-   Navbar Glass Effect
-================================ */
 
-.glass-nav {
-  background: rgba(255, 253, 251, 0.82);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid hsl(var(--border));
-}
 
 /* ================================
    Gallery Grid

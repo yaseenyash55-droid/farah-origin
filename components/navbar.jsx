@@ -15,7 +15,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="glass-nav fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-background/80 backdrop-blur-lg border-b border-border">
       <div className="container flex justify-between items-center h-20">
         <Link href="/" className="text-xl font-bold tracking-widest uppercase text-[var(--accent)]">
           Farah Origin
