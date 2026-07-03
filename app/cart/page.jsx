@@ -101,12 +101,15 @@ const CartPage = () => {
                     <span>${total.toFixed(2)}</span>
                   </div>
                 </div>
-                <button 
-                  className="w-full mt-8 bg-primary text-primary-foreground py-3 rounded-full font-semibold hover:bg-primary/90 transition-all text-lg disabled:bg-muted disabled:cursor-not-allowed"
-                  disabled={cartItems.length === 0}
-                >
-                  Proceed to Checkout
-                </button>
+                <Link href="/order-confirmation">
+                  <button 
+                    className="w-full mt-8 bg-primary text-primary-foreground py-3 rounded-full font-semibold hover:bg-primary/90 transition-all text-lg disabled:bg-muted disabled:cursor-not-allowed"
+                    disabled={cartItems.length === 0}
+                    onClick={() => setCartItems([])}
+                  >
+                    Proceed to Checkout
+                  </button>
+                </Link>
                 <Link href="/gallery" className="w-full mt-4 inline-block text-center text-primary font-semibold hover:underline">
                   Continue Shopping
                 </Link>
