@@ -3,7 +3,7 @@ import { useState } from "react";
 import { galleryItems } from "@/data/gallery";
 import { X, ExternalLink } from "lucide-react";
 
-export default function Gallery() {
+export default function Gallery({ showTitle = true }) {
   const [filter, setFilter] = useState("all");
   const [activeImage, setActiveImage] = useState(null);
 
@@ -15,26 +15,28 @@ export default function Gallery() {
   };
 
   return (
-    <section id="gallery" className="py-24 bg-[var(--background)]">
+    <section id="gallery" className="py-12 bg-[var(--background)]">
       <div className="container">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-light tracking-wide mb-4">Handcrafted Collections</h2>
-          <div className="w-16 h-[2px] bg-[var(--accent)] mx-auto mb-8"></div>
-          
-          {/* Category Filter Controls */}
-          <div className="flex justify-center space-x-4 mb-12">
-            {["all", "crochet", "henna"].map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setFilter(cat)}
-                className={`px-5 py-2 rounded-full text-xs uppercase tracking-wider transition-all ${
-                  filter === cat ? "bg-[var(--accent)] text-[#0d0c0c] font-semibold" : "border border-[var(--border)] hover:border-[var(--accent)] text-[var(--foreground)]"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+        {showTitle && (
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-light tracking-wide mb-4">Handcrafted Collections</h2>
+            <div className="w-16 h-[2px] bg-[var(--accent)] mx-auto mb-8"></div>
           </div>
+        )}
+        
+        {/* Category Filter Controls */}
+        <div className="flex justify-center space-x-4 mb-12">
+          {["all", "crochet", "henna"].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setFilter(cat)}
+              className={`px-5 py-2 rounded-full text-xs uppercase tracking-wider transition-all ${
+                filter === cat ? "bg-[var(--accent)] text-[#0d0c0c] font-semibold" : "border border-[var(--border)] hover:border-[var(--accent)] text-[var(--foreground)]"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
 
         {/* Portfolio Dynamic Grid Layout */}
