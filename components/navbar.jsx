@@ -1,11 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowLeft } from "lucide-react";
 import { ThemeToggleButton } from "./ThemeToggleButton";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+  const isHome = pathname === "/";
 
   // Lock body scroll when mobile drawer is open
   useEffect(() => {
@@ -28,9 +32,20 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-background/80 backdrop-blur-lg border-b border-border">
       <div className="container flex justify-between items-center h-20">
-        <Link href="/" className="text-xl font-bold tracking-widest uppercase text-[var(--accent)]">
-          Farah Origin
-        </Link>
+        <div className="flex items-center gap-3">
+          {!isHome && (
+            <button
+              onClick={() => router.back()}
+              className="p-2 hover:bg-secondary rounded-full transition-colors text-[var(--foreground)]"
+              aria-label="Go back"
+            >
+              <ArrowLeft size={20} />
+            </button>
+          )}
+          <Link href="/" className="text-xl font-bold tracking-widest uppercase text-[var(--accent)]">
+            Farah Origin
+          </Link>
+        </div>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-8 items-center">
