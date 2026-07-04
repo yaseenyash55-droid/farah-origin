@@ -3,6 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "../components/ThemeProvider";
 import { CartProvider } from "../context/CartContext";
 import { AuthProvider } from "../context/AuthContext";
+import BottomNavigation from "../components/BottomNavigation";
 import ServiceWorkerRegister from "../components/ServiceWorkerRegister";
 
 // Load the elegant Serif font for headings
@@ -38,7 +39,10 @@ export default function RootLayout({ children }) {
         <CartProvider>
           <AuthProvider>
             <ThemeProvider>
-              {children}
+              <div className="pb-16 md:pb-0 min-h-screen flex flex-col justify-between">
+                {children}
+              </div>
+              <BottomNavigation />
             </ThemeProvider>
           </AuthProvider>
         </CartProvider>
