@@ -11,7 +11,8 @@
     "apk:sync": "npx cap sync android",
     "apk:build": "cd android && gradlew assembleRelease",
     "apk:dev": "cd android && gradlew assembleDebug",
-    "apk:full": "npm run build:static && npm run apk:sync && cd android && gradlew assembleRelease"
+    "apk:full": "npm run build:static && npm run apk:sync && cd android && gradlew assembleRelease",
+    "apk:export": "node scripts/build-apk.js"
   },
   "dependencies": {
     "@capacitor/android": "^8.4.1",

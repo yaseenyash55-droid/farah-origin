@@ -22,6 +22,7 @@ export default function Navbar() {
     { href: "/reviews", label: "Reviews" },
     { href: "/view-collection", label: "Collection" },
     { href: "/contact-us", label: "Contact" },
+    { href: "/download", label: "Install App" },
   ];
 
   return (
