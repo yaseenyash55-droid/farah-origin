@@ -5,6 +5,7 @@ import { CartProvider } from "../context/CartContext";
 import { AuthProvider } from "../context/AuthContext";
 import BottomNavigation from "../components/BottomNavigation";
 import ServiceWorkerRegister from "../components/ServiceWorkerRegister";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 // Load the elegant Serif font for headings
 const playfair = Playfair_Display({ 
@@ -47,6 +48,7 @@ export default function RootLayout({ children }) {
           </AuthProvider>
         </CartProvider>
         <ServiceWorkerRegister />
+        <SpeedInsights />
       </body>
     </html>
   );
