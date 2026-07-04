@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 
 export async function POST(request) {
   try {
-    const { name, email, phone, otp } = await request.json();
+    const { name, email, phone } = await request.json();
 
     if (!email && !phone) {
       return NextResponse.json(
@@ -11,6 +11,9 @@ export async function POST(request) {
         { status: 400 }
       );
     }
+
+    // Generate random 6-digit OTP on the server
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
 
     let emailSent = false;
     let smsSent = false;
@@ -37,15 +40,15 @@ export async function POST(request) {
         const mailOptions = {
           from: `"Farah Origin" <${smtpUser}>`,
           to: email,
-          subject: `${otp} is your Farah Origin Verification Code`,
-          text: `Hi ${name || "User"},\n\nYour verification code is: ${otp}\n\nThis code will expire in 10 minutes.\n\nThank you,\nFarah Origin Team`,
+          subject: `${otpCode} is your Farah Origin Verification Code`,
+          text: `Hi ${name || "User"},\n\nYour verification code is: ${otpCode}\n\nThis code will expire in 10 minutes.\n\nThank you,\nFarah Origin Team`,
           html: `
             <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 500px; margin: 0 auto; padding: 30px; border: 1px border #e5e7eb; border-radius: 16px; background-color: #ffffff;">
               <h2 style="font-family: Georgia, serif; color: #b45309; text-align: center; margin-bottom: 24px; font-style: italic;">Farah Origin</h2>
               <p style="font-size: 14px; color: #4b5563; line-height: 1.6;">Hi ${name || "User"},</p>
               <p style="font-size: 14px; color: #4b5563; line-height: 1.6;">You are logging in to your Farah Origin account. Use the following One-Time Password (OTP) to complete your verification:</p>
               <div style="text-align: center; margin: 30px 0;">
-                <span style="font-family: monospace; font-size: 32px; font-weight: bold; color: #111827; letter-spacing: 4px; padding: 12px 24px; background-color: #f3f4f6; border-radius: 8px; border: 1px solid #e5e7eb;">${otp}</span>
+                <span style="font-family: monospace; font-size: 32px; font-weight: bold; color: #111827; letter-spacing: 4px; padding: 12px 24px; background-color: #f3f4f6; border-radius: 8px; border: 1px solid #e5e7eb;">${otpCode}</span>
               </div>
               <p style="font-size: 12px; color: #9ca3af; text-align: center; margin-top: 30px; line-height: 1.5;">This code is valid for 10 minutes. If you did not request this, you can safely ignore this email.</p>
             </div>
@@ -77,7 +80,7 @@ export async function POST(request) {
         }
 
         await client.messages.create({
-          body: `[Farah Origin] Verification Code: ${otp}. Valid for 10 minutes.`,
+          body: `[Farah Origin] Verification Code: ${otpCode}. Valid for 10 minutes.`,
           from: twilioFrom,
           to: formattedPhone,
         });
@@ -88,11 +91,19 @@ export async function POST(request) {
       }
     }
 
+    const simulated = !emailSent && !smsSent;
+    if (simulated) {
+      console.log(`[SIMULATED OTP] Generated verification code ${otpCode} for phone: ${phone}, email: ${email}`);
+    } else {
+      console.log(`[LIVE OTP] Dispatched verification code ${otpCode} (Email: ${emailSent}, SMS: ${smsSent})`);
+    }
+
     return NextResponse.json({
       success: true,
       emailSent,
       smsSent,
-      simulated: !emailSent && !smsSent,
+      simulated,
+      otp: otpCode,
       errors: Object.keys(errors).length > 0 ? errors : null,
       message: emailSent || smsSent 
         ? "OTP dispatched successfully!" 

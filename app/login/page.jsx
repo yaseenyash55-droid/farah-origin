@@ -62,8 +62,6 @@ export default function LoginPage() {
       return;
     }
 
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    setGeneratedOtp(otp);
     setOtpSent(true);
     setResendTimer(30);
 
@@ -74,14 +72,17 @@ export default function LoginPage() {
       body: JSON.stringify({
         name: form.name,
         email: form.email,
-        phone: form.phone,
-        otp: otp
+        phone: form.phone
       })
     })
     .then(res => res.json())
     .then(data => {
       console.log("OTP API response:", data);
       setIsSimulated(!!data.simulated);
+      if (data.success && data.otp) {
+        setGeneratedOtp(data.otp);
+        console.log("OTP generated on server:", data.otp);
+      }
     })
     .catch(err => {
       console.error("Error sending OTP:", err);
@@ -93,8 +94,6 @@ export default function LoginPage() {
     e.preventDefault();
     if (resendTimer > 0) return;
 
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    setGeneratedOtp(otp);
     setResendTimer(30);
     setUserOtpInput("");
     setErrors({});
@@ -105,14 +104,17 @@ export default function LoginPage() {
       body: JSON.stringify({
         name: form.name,
         email: form.email,
-        phone: form.phone,
-        otp: otp
+        phone: form.phone
       })
     })
     .then(res => res.json())
     .then(data => {
       console.log("Resend OTP response:", data);
       setIsSimulated(!!data.simulated);
+      if (data.success && data.otp) {
+        setGeneratedOtp(data.otp);
+        console.log("OTP resent & generated on server:", data.otp);
+      }
     })
     .catch(err => {
       console.error("Error resending OTP:", err);
@@ -325,7 +327,7 @@ export default function LoginPage() {
                         <div className="mt-1 border-t border-border/50 pt-1.5 text-[10px] text-amber-600 dark:text-amber-400">
                           ⚠️ Live OTP delivery variables are not set. The server is running in simulated demo mode. 
                           <br />
-                          Use the master test code <strong className="font-mono text-xs text-primary font-bold">123456</strong> or check the console to verify.
+                          Use simulated code <strong className="font-mono text-xs text-primary font-bold">{generatedOtp || "..."}</strong>, master test code <strong className="font-mono text-xs text-primary font-bold">123456</strong>, or check the console to verify.
                         </div>
                       )}
                     </div>
