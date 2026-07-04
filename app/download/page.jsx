@@ -182,7 +182,7 @@ export default function DownloadPage() {
                     Download Android App (.apk)
                   </a>
                   <span className="block text-center text-xs text-muted-foreground mt-3">
-                    Size: ~18 MB | Recommended for Android 10+
+                    Size: ~8 MB | Recommended for Android 10+
                   </span>
                 </div>
               </div>
