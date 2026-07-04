@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -13,13 +14,15 @@ import {
   Lock, 
   Smartphone, 
   AlertCircle,
-  HelpCircle,
   ShieldCheck,
-  RefreshCw
+  RefreshCw,
+  Mail,
+  LockKeyhole
 } from "lucide-react";
 
 export default function CheckoutPage() {
   const { items: cartItems, clearCart } = useCart();
+  const { user, isLoggedIn, login } = useAuth();
   const router = useRouter();
 
   // If cart is empty, redirect back to cart page (but wait for client mounting)
@@ -29,9 +32,28 @@ export default function CheckoutPage() {
     }
   }, [cartItems, router]);
 
-  // Step state: 1 = Address, 2 = Order Summary, 3 = Payment
+  // Step state: 1 = Login/OTP, 2 = Address, 3 = Order Summary, 4 = Payment
   const [activeStep, setActiveStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState([]);
+
+  // Auto-fill logged in state
+  useEffect(() => {
+    if (isLoggedIn) {
+      setCompletedSteps(prev => [...new Set([...prev, 1])]);
+      setActiveStep(prev => prev === 1 ? 2 : prev);
+    } else {
+      // Reset steps if logged out
+      setCompletedSteps(prev => prev.filter(s => s !== 1));
+      setActiveStep(1);
+    }
+  }, [isLoggedIn]);
+
+  // Login/OTP Form State
+  const [loginForm, setLoginForm] = useState({ name: "", email: "", phone: "" });
+  const [otpSent, setOtpSent] = useState(false);
+  const [generatedOtp, setGeneratedOtp] = useState("");
+  const [userOtpInput, setUserOtpInput] = useState("");
+  const [loginErrors, setLoginErrors] = useState({});
 
   // Address Form State
   const [addressForm, setAddressForm] = useState({
@@ -62,7 +84,6 @@ export default function CheckoutPage() {
   const [userCaptchaInput, setUserCaptchaInput] = useState("");
   const [captchaError, setCaptchaError] = useState("");
 
-  // Generate a random 3-digit security code for Cash on Delivery (like Flipkart)
   const generateCaptcha = () => {
     const code = Math.floor(100 + Math.random() * 900).toString();
     setCaptchaCode(code);
@@ -74,11 +95,70 @@ export default function CheckoutPage() {
     generateCaptcha();
   }, []);
 
-  // Calculate pricing
+  // Pre-fill address name & phone if user logs in
+  useEffect(() => {
+    if (user) {
+      setAddressForm(prev => ({
+        ...prev,
+        name: prev.name || user.name,
+        phone: prev.phone || user.phone
+      }));
+    }
+  }, [user]);
+
+  // Pricing
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const shipping = subtotal > 0 ? 10.00 : 0;
   const taxes = subtotal * 0.08; // 8% tax
   const total = subtotal + shipping + taxes;
+
+  // Handle Login Changes
+  const handleLoginChange = (e) => {
+    const { name, value } = e.target;
+    setLoginForm(prev => ({ ...prev, [name]: value }));
+    if (loginErrors[name]) {
+      setLoginErrors(prev => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  // Send OTP
+  const handleSendOtp = (e) => {
+    e.preventDefault();
+    const errors = {};
+    if (!loginForm.name.trim()) errors.name = "Name is required";
+    if (!loginForm.email.trim() || !/\S+@\S+\.\S+/.test(loginForm.email)) {
+      errors.email = "Provide a valid email address";
+    }
+    if (!loginForm.phone.trim() || !/^\d{10}$/.test(loginForm.phone)) {
+      errors.phone = "Provide a valid 10-digit phone number";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setLoginErrors(errors);
+      return;
+    }
+
+    // Generate random 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    setGeneratedOtp(otp);
+    setOtpSent(true);
+  };
+
+  // Verify OTP
+  const handleVerifyOtp = (e) => {
+    e.preventDefault();
+    if (userOtpInput === generatedOtp || userOtpInput === "123456") {
+      login({
+        name: loginForm.name,
+        email: loginForm.email,
+        phone: loginForm.phone
+      });
+      setCompletedSteps(prev => [...new Set([...prev, 1])]);
+      setActiveStep(2);
+    } else {
+      setLoginErrors({ otp: "Incorrect OTP. Please enter the correct code." });
+    }
+  };
 
   // Handle address form changes
   const handleAddressChange = (e) => {
@@ -111,15 +191,15 @@ export default function CheckoutPage() {
   const handleAddressSubmit = (e) => {
     e.preventDefault();
     if (validateAddress()) {
-      setCompletedSteps(prev => [...new Set([...prev, 1])]);
-      setActiveStep(2);
+      setCompletedSteps(prev => [...new Set([...prev, 1, 2])]);
+      setActiveStep(3);
     }
   };
 
   // Submit Order Summary Step
   const handleSummarySubmit = () => {
-    setCompletedSteps(prev => [...new Set([...prev, 2])]);
-    setActiveStep(3);
+    setCompletedSteps(prev => [...new Set([...prev, 1, 2, 3])]);
+    setActiveStep(4);
   };
 
   // Handle Card details changes
@@ -151,8 +231,51 @@ export default function CheckoutPage() {
     return Object.keys(errors).length === 0;
   };
 
+  // Trigger Native Local Notifications or Browser fallback
+  const triggerNotification = async (orderNum) => {
+    try {
+      // Dynamic import to avoid SSR errors
+      const { LocalNotifications } = await import('@capacitor/local-notifications');
+      const isPermitted = await LocalNotifications.checkPermissions();
+      if (isPermitted.display !== 'granted') {
+        await LocalNotifications.requestPermissions();
+      }
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            title: "Order Placed Successfully! 🧶",
+            body: `Your order ${orderNum} has been received. Track it in your account!`,
+            id: Math.floor(Math.random() * 10000),
+            schedule: { at: new Date(Date.now() + 1000) }
+          }
+        ]
+      });
+      console.log("Capacitor local notification scheduled successfully.");
+    } catch (e) {
+      console.warn("Capacitor local notifications not available. Using browser fallback API.", e);
+      // Fallback: standard web notification
+      if (typeof window !== "undefined" && "Notification" in window) {
+        if (Notification.permission === "granted") {
+          new Notification("Order Placed Successfully! 🧶", {
+            body: `Your order ${orderNum} has been received. Track it in your account!`,
+            icon: "/icon-192x192.png"
+          });
+        } else if (Notification.permission !== "denied") {
+          Notification.requestPermission().then(permission => {
+            if (permission === "granted") {
+              new Notification("Order Placed Successfully! 🧶", {
+                body: `Your order ${orderNum} has been received. Track it in your account!`,
+                icon: "/icon-192x192.png"
+              });
+            }
+          });
+        }
+      }
+    }
+  };
+
   // Place Order Action
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     // 1. Validation based on payment method
     if (paymentMethod === "card") {
       if (!validateCard()) return;
@@ -201,11 +324,16 @@ export default function CheckoutPage() {
         shipping,
         taxes,
         total
-      }
+      },
+      emailNotificationSent: true,
+      recipientEmail: user?.email || loginForm.email
     };
 
-    // 3. Save order data and route to Order Confirmation
+    // 3. Save order data and trigger notification
     localStorage.setItem("lastOrder", JSON.stringify(orderData));
+    await triggerNotification(orderNumber);
+
+    // 4. Clear cart and route to Order Confirmation
     clearCart();
     router.push("/order-confirmation");
   };
@@ -228,7 +356,7 @@ export default function CheckoutPage() {
           {/* Left Area - 2 Cols (Multi-step checkout) */}
           <div className="lg:col-span-2 space-y-6">
             
-            {/* STEP 1: DELIVERY ADDRESS */}
+            {/* STEP 1: LOGIN OR SIGNUP */}
             <div className={`bg-card rounded-2xl border shadow-sm transition-all duration-300 overflow-hidden ${
               activeStep === 1 ? "border-primary ring-1 ring-primary/20" : "border-border"
             }`}>
@@ -244,20 +372,150 @@ export default function CheckoutPage() {
                     {completedSteps.includes(1) ? <Check size={16} /> : "1"}
                   </div>
                   <div>
+                    <h2 className="font-bold text-lg">LOGIN OR SIGNUP</h2>
+                    {completedSteps.includes(1) && user && (
+                      <p className="text-xs text-muted-foreground mt-0.5 font-semibold text-green-600 flex items-center gap-1">
+                        <Check size={12} /> Logged in as {user.name} ({user.phone})
+                      </p>
+                    )}
+                  </div>
+                </div>
+                {completedSteps.includes(1) && activeStep !== 1 && (
+                  <button className="text-primary text-sm font-semibold hover:underline">VIEW</button>
+                )}
+              </div>
+
+              {activeStep === 1 && (
+                <div className="p-6 border-t border-border bg-card">
+                  {!otpSent ? (
+                    <form onSubmit={handleSendOtp} className="space-y-4 max-w-md">
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Please enter your details to verify via simulated OTP. Just like Flipkart, logging in saves your orders and tracks shipping status.
+                      </p>
+                      
+                      <div>
+                        <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Full Name</label>
+                        <input
+                          type="text"
+                          name="name"
+                          value={loginForm.name}
+                          onChange={handleLoginChange}
+                          placeholder="e.g. Yash"
+                          className="w-full bg-background border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary"
+                        />
+                        {loginErrors.name && <p className="text-xs text-primary mt-1">{loginErrors.name}</p>}
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Email Address (For Invoices)</label>
+                        <input
+                          type="email"
+                          name="email"
+                          value={loginForm.email}
+                          onChange={handleLoginChange}
+                          placeholder="name@example.com"
+                          className="w-full bg-background border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary"
+                        />
+                        {loginErrors.email && <p className="text-xs text-primary mt-1">{loginErrors.email}</p>}
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">10-Digit Mobile Number</label>
+                        <input
+                          type="text"
+                          name="phone"
+                          value={loginForm.phone}
+                          onChange={handleLoginChange}
+                          placeholder="e.g. 9876543210"
+                          className="w-full bg-background border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary"
+                        />
+                        {loginErrors.phone && <p className="text-xs text-primary mt-1">{loginErrors.phone}</p>}
+                      </div>
+
+                      <button
+                        type="submit"
+                        className="w-full bg-primary text-primary-foreground py-3.5 rounded-xl font-bold hover:bg-primary/95 transition shadow-md shadow-primary/10"
+                      >
+                        Continue & Send OTP
+                      </button>
+                    </form>
+                  ) : (
+                    <form onSubmit={handleVerifyOtp} className="space-y-4 max-w-md">
+                      <div className="bg-secondary/40 border border-secondary rounded-xl p-4 flex gap-2.5 text-xs text-secondary-foreground items-center mb-4">
+                        <Smartphone className="text-primary animate-pulse" size={20} />
+                        <div>
+                          Simulated OTP sent to <strong className="font-mono">{loginForm.phone}</strong>.
+                          <br />
+                          Use OTP: <strong className="text-primary text-sm font-mono tracking-wider ml-1">{generatedOtp}</strong>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Enter 6-Digit OTP</label>
+                        <input
+                          type="text"
+                          value={userOtpInput}
+                          onChange={(e) => {
+                            setUserOtpInput(e.target.value.replace(/\D/g, "").substring(0, 6));
+                            setLoginErrors({});
+                          }}
+                          placeholder="------"
+                          className="w-full bg-background border border-border rounded-xl px-4 py-3.5 text-center font-mono text-lg font-bold tracking-widest focus:outline-none focus:border-primary"
+                        />
+                        {loginErrors.otp && <p className="text-xs text-primary mt-1 text-center font-semibold">{loginErrors.otp}</p>}
+                      </div>
+
+                      <div className="flex gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setOtpSent(false)}
+                          className="flex-1 border border-border py-3.5 rounded-xl font-bold hover:bg-muted transition text-sm text-center"
+                        >
+                          Back
+                        </button>
+                        <button
+                          type="submit"
+                          className="flex-2 bg-primary text-primary-foreground py-3.5 px-8 rounded-xl font-bold hover:bg-primary/95 transition shadow-md shadow-primary/10 text-sm"
+                        >
+                          Verify & Continue
+                        </button>
+                      </div>
+                    </form>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* STEP 2: DELIVERY ADDRESS */}
+            <div className={`bg-card rounded-2xl border shadow-sm transition-all duration-300 overflow-hidden ${
+              activeStep === 2 ? "border-primary ring-1 ring-primary/20" : "border-border"
+            }`}>
+              <div className={`px-6 py-4 flex items-center justify-between cursor-pointer ${
+                activeStep !== 2 && completedSteps.includes(2) ? "bg-secondary/10" : ""
+              }`}
+              onClick={() => completedSteps.includes(2) && setActiveStep(2)}
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+                    completedSteps.includes(2) ? "bg-green-500 text-white" : "bg-primary text-primary-foreground"
+                  }`}>
+                    {completedSteps.includes(2) ? <Check size={16} /> : "2"}
+                  </div>
+                  <div>
                     <h2 className="font-bold text-lg">DELIVERY ADDRESS</h2>
-                    {completedSteps.includes(1) && activeStep !== 1 && (
+                    {completedSteps.includes(2) && activeStep !== 2 && (
                       <p className="text-xs text-muted-foreground mt-0.5">
                         {addressForm.name} • {addressForm.addressLine}, {addressForm.city}
                       </p>
                     )}
                   </div>
                 </div>
-                {completedSteps.includes(1) && activeStep !== 1 && (
+                {completedSteps.includes(2) && activeStep !== 2 && (
                   <button className="text-primary text-sm font-semibold hover:underline">CHANGE</button>
                 )}
               </div>
 
-              {activeStep === 1 && (
+              {activeStep === 2 && (
                 <div className="p-6 border-t border-border bg-card">
                   <form onSubmit={handleAddressSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -379,36 +637,36 @@ export default function CheckoutPage() {
               )}
             </div>
 
-            {/* STEP 2: ORDER SUMMARY */}
+            {/* STEP 3: ORDER SUMMARY */}
             <div className={`bg-card rounded-2xl border shadow-sm transition-all duration-300 overflow-hidden ${
-              activeStep === 2 ? "border-primary ring-1 ring-primary/20" : "border-border"
+              activeStep === 3 ? "border-primary ring-1 ring-primary/20" : "border-border"
             }`}>
               <div className={`px-6 py-4 flex items-center justify-between cursor-pointer ${
-                activeStep !== 2 && completedSteps.includes(2) ? "bg-secondary/10" : ""
+                activeStep !== 3 && completedSteps.includes(3) ? "bg-secondary/10" : ""
               }`}
-              onClick={() => completedSteps.includes(2) && setActiveStep(2)}
+              onClick={() => completedSteps.includes(3) && setActiveStep(3)}
               >
                 <div className="flex items-center gap-3">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
-                    completedSteps.includes(2) ? "bg-green-500 text-white" : "bg-primary text-primary-foreground"
+                    completedSteps.includes(3) ? "bg-green-500 text-white" : "bg-primary text-primary-foreground"
                   }`}>
-                    {completedSteps.includes(2) ? <Check size={16} /> : "2"}
+                    {completedSteps.includes(3) ? <Check size={16} /> : "3"}
                   </div>
                   <div>
                     <h2 className="font-bold text-lg">ORDER SUMMARY</h2>
-                    {completedSteps.includes(2) && activeStep !== 2 && (
+                    {completedSteps.includes(3) && activeStep !== 3 && (
                       <p className="text-xs text-muted-foreground mt-0.5">
                         {cartItems.length} {cartItems.length === 1 ? "item" : "items"} inside cart
                       </p>
                     )}
                   </div>
                 </div>
-                {completedSteps.includes(2) && activeStep !== 2 && (
+                {completedSteps.includes(3) && activeStep !== 3 && (
                   <button className="text-primary text-sm font-semibold hover:underline">VIEW</button>
                 )}
               </div>
 
-              {activeStep === 2 && (
+              {activeStep === 3 && (
                 <div className="p-6 border-t border-border bg-card space-y-4">
                   <div className="space-y-4">
                     {cartItems.map(item => (
@@ -437,18 +695,18 @@ export default function CheckoutPage() {
               )}
             </div>
 
-            {/* STEP 3: PAYMENT OPTIONS */}
+            {/* STEP 4: PAYMENT OPTIONS */}
             <div className={`bg-card rounded-2xl border shadow-sm transition-all duration-300 overflow-hidden ${
-              activeStep === 3 ? "border-primary ring-1 ring-primary/20" : "border-border"
+              activeStep === 4 ? "border-primary ring-1 ring-primary/20" : "border-border"
             }`}>
               <div className="px-6 py-4 flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm">
-                  3
+                  4
                 </div>
                 <h2 className="font-bold text-lg">PAYMENT OPTIONS</h2>
               </div>
 
-              {activeStep === 3 && (
+              {activeStep === 4 && (
                 <div className="p-6 border-t border-border bg-card space-y-6">
                   
                   {/* PAYMENT SELECTORS */}

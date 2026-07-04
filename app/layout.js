@@ -2,6 +2,7 @@ import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "../components/ThemeProvider";
 import { CartProvider } from "../context/CartContext";
+import { AuthProvider } from "../context/AuthContext";
 import ServiceWorkerRegister from "../components/ServiceWorkerRegister";
 
 // Load the elegant Serif font for headings
@@ -35,9 +36,11 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${playfair.variable} font-sans bg-background text-foreground`}>
         <CartProvider>
-          <ThemeProvider>
-            {children}
-          </ThemeProvider>
+          <AuthProvider>
+            <ThemeProvider>
+              {children}
+            </ThemeProvider>
+          </AuthProvider>
         </CartProvider>
         <ServiceWorkerRegister />
       </body>
