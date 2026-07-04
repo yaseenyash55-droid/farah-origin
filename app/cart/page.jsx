@@ -73,7 +73,7 @@ const CartPage = () => {
                     <span>${total.toFixed(2)}</span>
                   </div>
                 </div>
-                <Link href="/order-confirmation">
+                <Link href="/checkout">
                   <button 
                     className="w-full mt-8 bg-primary text-primary-foreground py-3 rounded-full font-semibold hover:bg-primary/90 transition-all text-lg disabled:bg-muted disabled:cursor-not-allowed"
                     disabled={cartItems.length === 0}
