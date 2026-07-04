@@ -13,9 +13,7 @@ import {
   ShoppingBag, 
   ChevronRight, 
   ArrowLeft,
-  Bell,
-  MailCheck,
-  MapPinCheck
+  Bell
 } from "lucide-react";
 
 export default function LoginPage() {
@@ -28,6 +26,17 @@ export default function LoginPage() {
   const [generatedOtp, setGeneratedOtp] = useState("");
   const [userOtpInput, setUserOtpInput] = useState("");
   const [errors, setErrors] = useState({});
+  const [isSimulated, setIsSimulated] = useState(false);
+  const [resendTimer, setResendTimer] = useState(0);
+
+  useEffect(() => {
+    if (resendTimer > 0) {
+      const interval = setInterval(() => {
+        setResendTimer(prev => prev - 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [resendTimer]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -56,6 +65,59 @@ export default function LoginPage() {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     setGeneratedOtp(otp);
     setOtpSent(true);
+    setResendTimer(30);
+
+    // Dispatch OTP to the recipient via Email/SMS API
+    fetch("/api/send-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        otp: otp
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log("OTP API response:", data);
+      setIsSimulated(!!data.simulated);
+    })
+    .catch(err => {
+      console.error("Error sending OTP:", err);
+      setIsSimulated(true);
+    });
+  };
+
+  const handleResendOtp = (e) => {
+    e.preventDefault();
+    if (resendTimer > 0) return;
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    setGeneratedOtp(otp);
+    setResendTimer(30);
+    setUserOtpInput("");
+    setErrors({});
+
+    fetch("/api/send-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        otp: otp
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Resend OTP response:", data);
+      setIsSimulated(!!data.simulated);
+    })
+    .catch(err => {
+      console.error("Error resending OTP:", err);
+      setIsSimulated(true);
+    });
   };
 
   const handleVerifyOtp = (e) => {
@@ -66,8 +128,8 @@ export default function LoginPage() {
         email: form.email,
         phone: form.phone
       });
-      // Go back to previous page or home
-      router.back();
+      // Go to home page
+      router.push("/");
     } else {
       setErrors({ otp: "Incorrect OTP. Try again." });
     }
@@ -155,11 +217,11 @@ export default function LoginPage() {
                       <span>Push Notifications: <strong>Active (Capacitor Native)</strong></span>
                     </div>
                     <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/25 p-3 rounded-xl text-green-700">
-                      <MailCheck size={16} className="text-green-600" />
+                      <Mail size={16} className="text-green-600" />
                       <span>Email Receipts: <strong>Enabled ({user.email})</strong></span>
                     </div>
                     <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/25 p-3 rounded-xl text-green-700">
-                      <MapPinCheck size={16} className="text-green-600" />
+                      <Smartphone size={16} className="text-green-600" />
                       <span>Flipkart Order Tracking: <strong>Available</strong></span>
                     </div>
                   </div>
@@ -252,13 +314,20 @@ export default function LoginPage() {
                       <p className="text-xs text-muted-foreground">We sent a verification code to your phone.</p>
                     </div>
 
-                    <div className="bg-secondary/40 border border-secondary rounded-xl p-3.5 flex gap-2.5 text-xs text-secondary-foreground items-center">
-                      <Smartphone className="text-primary animate-pulse" size={20} />
-                      <div>
-                        Simulated OTP sent to <strong className="font-mono">{form.phone}</strong>.
-                        <br />
-                        Use code: <strong className="text-primary font-mono text-sm tracking-wider ml-1">{generatedOtp}</strong>
+                    <div className="bg-secondary/40 border border-secondary rounded-xl p-3.5 flex flex-col gap-1.5 text-xs text-secondary-foreground">
+                      <div className="flex gap-2.5 items-center">
+                        <Smartphone className="text-primary animate-pulse" size={20} />
+                        <div>
+                          OTP sent to <strong className="font-mono">{form.phone}</strong>. Please enter the verification code.
+                        </div>
                       </div>
+                      {isSimulated && (
+                        <div className="mt-1 border-t border-border/50 pt-1.5 text-[10px] text-amber-600 dark:text-amber-400">
+                          ⚠️ Live OTP delivery variables are not set. The server is running in simulated demo mode. 
+                          <br />
+                          Use the master test code <strong className="font-mono text-xs text-primary font-bold">123456</strong> or check the console to verify.
+                        </div>
+                      )}
                     </div>
 
                     <div>
@@ -274,6 +343,22 @@ export default function LoginPage() {
                         className="w-full bg-background border border-border rounded-xl px-4 py-3.5 text-center font-mono text-lg font-bold tracking-widest focus:outline-none focus:border-primary"
                       />
                       {errors.otp && <p className="text-xs text-primary mt-1 text-center font-semibold">{errors.otp}</p>}
+                      
+                      <div className="text-center mt-2">
+                        {resendTimer > 0 ? (
+                          <span className="text-xs text-muted-foreground">
+                            Resend code in <strong className="font-semibold">{resendTimer}s</strong>
+                          </span>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={handleResendOtp}
+                            className="text-primary hover:underline font-bold text-xs"
+                          >
+                            Resend OTP
+                          </button>
+                        )}
+                      </div>
                     </div>
 
                     <div className="flex gap-3 pt-2">

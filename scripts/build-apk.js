@@ -28,6 +28,17 @@ function main() {
     process.exit(1);
   }
 
+  // Delete the recursively copied APK file from the output directory to prevent nesting bloat
+  const copiedApkPath = path.join(rootDir, "out", "farah-origin.apk");
+  if (fs.existsSync(copiedApkPath)) {
+    console.log("Cleaning recursively copied APK from static export...");
+    try {
+      fs.unlinkSync(copiedApkPath);
+    } catch (err) {
+      console.warn(`Warning: Could not delete ${copiedApkPath}: ${err.message}`);
+    }
+  }
+
   // 2. Sync files with Capacitor
   console.log("\n[Step 2/4] Syncing web assets to Capacitor Android...");
   if (!runCommand("npx cap sync android", rootDir)) {

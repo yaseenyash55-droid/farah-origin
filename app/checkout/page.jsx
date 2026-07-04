@@ -54,6 +54,17 @@ export default function CheckoutPage() {
   const [generatedOtp, setGeneratedOtp] = useState("");
   const [userOtpInput, setUserOtpInput] = useState("");
   const [loginErrors, setLoginErrors] = useState({});
+  const [isSimulated, setIsSimulated] = useState(false);
+  const [resendTimer, setResendTimer] = useState(0);
+
+  useEffect(() => {
+    if (resendTimer > 0) {
+      const interval = setInterval(() => {
+        setResendTimer(prev => prev - 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [resendTimer]);
 
   // Address Form State
   const [addressForm, setAddressForm] = useState({
@@ -142,6 +153,60 @@ export default function CheckoutPage() {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     setGeneratedOtp(otp);
     setOtpSent(true);
+    setResendTimer(30);
+
+    // Send OTP to user's real email/phone via API
+    fetch("/api/send-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: loginForm.name,
+        email: loginForm.email,
+        phone: loginForm.phone,
+        otp: otp
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Checkout OTP API response:", data);
+      setIsSimulated(!!data.simulated);
+    })
+    .catch(err => {
+      console.error("Error sending checkout OTP:", err);
+      setIsSimulated(true);
+    });
+  };
+
+  // Resend OTP
+  const handleResendOtp = (e) => {
+    e.preventDefault();
+    if (resendTimer > 0) return;
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    setGeneratedOtp(otp);
+    setResendTimer(30);
+    setUserOtpInput("");
+    setLoginErrors({});
+
+    fetch("/api/send-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: loginForm.name,
+        email: loginForm.email,
+        phone: loginForm.phone,
+        otp: otp
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Checkout Resend OTP response:", data);
+      setIsSimulated(!!data.simulated);
+    })
+    .catch(err => {
+      console.error("Error resending checkout OTP:", err);
+      setIsSimulated(true);
+    });
   };
 
   // Verify OTP
@@ -441,13 +506,20 @@ export default function CheckoutPage() {
                     </form>
                   ) : (
                     <form onSubmit={handleVerifyOtp} className="space-y-4 max-w-md">
-                      <div className="bg-secondary/40 border border-secondary rounded-xl p-4 flex gap-2.5 text-xs text-secondary-foreground items-center mb-4">
-                        <Smartphone className="text-primary animate-pulse" size={20} />
-                        <div>
-                          Simulated OTP sent to <strong className="font-mono">{loginForm.phone}</strong>.
-                          <br />
-                          Use OTP: <strong className="text-primary text-sm font-mono tracking-wider ml-1">{generatedOtp}</strong>
+                      <div className="bg-secondary/40 border border-secondary rounded-xl p-4 flex flex-col gap-1.5 text-xs text-secondary-foreground mb-4">
+                        <div className="flex gap-2.5 items-center">
+                          <Smartphone className="text-primary animate-pulse" size={20} />
+                          <div>
+                            OTP sent to <strong className="font-mono">{loginForm.phone}</strong>. Please enter the verification code.
+                          </div>
                         </div>
+                        {isSimulated && (
+                          <div className="mt-1 border-t border-border/50 pt-1.5 text-[10px] text-amber-600 dark:text-amber-400">
+                            ⚠️ Live OTP delivery variables are not set. The server is running in simulated demo mode. 
+                            <br />
+                            Use the master test code <strong className="font-mono text-xs text-primary font-bold">123456</strong> or check the console to verify.
+                          </div>
+                        )}
                       </div>
 
                       <div>
@@ -463,6 +535,22 @@ export default function CheckoutPage() {
                           className="w-full bg-background border border-border rounded-xl px-4 py-3.5 text-center font-mono text-lg font-bold tracking-widest focus:outline-none focus:border-primary"
                         />
                         {loginErrors.otp && <p className="text-xs text-primary mt-1 text-center font-semibold">{loginErrors.otp}</p>}
+                        
+                        <div className="text-center mt-2">
+                          {resendTimer > 0 ? (
+                            <span className="text-xs text-muted-foreground">
+                              Resend code in <strong className="font-semibold">{resendTimer}s</strong>
+                            </span>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={handleResendOtp}
+                              className="text-primary hover:underline font-bold text-xs"
+                            >
+                              Resend OTP
+                            </button>
+                          )}
+                        </div>
                       </div>
 
                       <div className="flex gap-3">
@@ -674,10 +762,10 @@ export default function CheckoutPage() {
                         <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded-lg border" />
                         <div className="flex-grow">
                           <h4 className="font-semibold text-sm">{item.name}</h4>
-                          <p className="text-xs text-muted-foreground mt-1">${item.price.toFixed(2)} × {item.quantity}</p>
+                          <p className="text-xs text-muted-foreground mt-1">₹{item.price.toFixed(2)} × {item.quantity}</p>
                         </div>
                         <div className="text-right font-bold text-sm">
-                          ${(item.price * item.quantity).toFixed(2)}
+                          ₹{(item.price * item.quantity).toFixed(2)}
                         </div>
                       </div>
                     ))}
@@ -938,7 +1026,7 @@ export default function CheckoutPage() {
                       className="w-full bg-primary text-primary-foreground py-4 rounded-xl font-bold hover:bg-primary/95 transition shadow-lg shadow-primary/20 flex items-center justify-center gap-2"
                     >
                       <Lock size={18} />
-                      Confirm & Place Order (${total.toFixed(2)})
+                      Confirm & Place Order (₹{total.toFixed(2)})
                     </button>
                     <span className="block text-center text-xs text-muted-foreground mt-3 flex items-center justify-center gap-1">
                       <ShieldCheck size={12} className="text-green-500" />
@@ -960,32 +1048,32 @@ export default function CheckoutPage() {
               <div className="space-y-3.5 text-sm">
                 <div className="flex justify-between text-muted-foreground">
                   <span>Price ({cartItems.length} {cartItems.length === 1 ? "item" : "items"})</span>
-                  <span className="font-semibold text-foreground">${subtotal.toFixed(2)}</span>
+                  <span className="font-semibold text-foreground">₹{subtotal.toFixed(2)}</span>
                 </div>
                 
                 <div className="flex justify-between text-muted-foreground">
                   <span>Delivery Charges</span>
                   <span className="font-semibold text-green-600">
-                    {shipping === 0 ? "FREE" : `$${shipping.toFixed(2)}`}
+                    {shipping === 0 ? "FREE" : `₹${shipping.toFixed(2)}`}
                   </span>
                 </div>
 
                 <div className="flex justify-between text-muted-foreground">
                   <span>Tax & GST (8%)</span>
-                  <span className="font-semibold text-foreground">${taxes.toFixed(2)}</span>
+                  <span className="font-semibold text-foreground">₹{taxes.toFixed(2)}</span>
                 </div>
 
                 <div className="border-t border-dashed border-border/80 my-3"></div>
 
                 <div className="flex justify-between text-lg font-bold">
                   <span>Total Amount</span>
-                  <span className="text-primary">${total.toFixed(2)}</span>
+                  <span className="text-primary">₹{total.toFixed(2)}</span>
                 </div>
               </div>
 
               {/* Savings/Discount Tag */}
               <div className="bg-green-500/10 border border-green-500/20 text-green-600 p-3 rounded-xl text-xs font-bold text-center">
-                🎉 Special Offer: You saved $10.00 on delivery charges!
+                🎉 Special Offer: You saved ₹10.00 on delivery charges!
               </div>
 
               <div className="text-xs text-muted-foreground leading-relaxed flex gap-2">

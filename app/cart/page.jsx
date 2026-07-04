@@ -29,7 +29,7 @@ const CartPage = () => {
                       <img src={item.image} alt={item.name} className="w-24 h-24 object-cover rounded-md" />
                       <div className="flex-grow">
                         <h3 className="font-semibold text-lg">{item.name}</h3>
-                        <p className="text-sm text-muted-foreground">${item.price.toFixed(2)}</p>
+                        <p className="text-sm text-muted-foreground">₹{item.price.toFixed(2)}</p>
                       </div>
                       <div className="flex items-center gap-4">
                         <div className="flex items-center border border-border rounded-md">
@@ -61,16 +61,16 @@ const CartPage = () => {
                 <div className="space-y-4">
                   <div className="flex justify-between">
                     <span>Subtotal</span>
-                    <span>${subtotal.toFixed(2)}</span>
+                    <span>₹{subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Shipping</span>
-                    <span>${shipping.toFixed(2)}</span>
+                    <span>₹{shipping.toFixed(2)}</span>
                   </div>
                   <div className="border-t border-border my-4"></div>
                   <div className="flex justify-between font-bold text-xl">
                     <span>Total</span>
-                    <span>${total.toFixed(2)}</span>
+                    <span>₹{total.toFixed(2)}</span>
                   </div>
                 </div>
                 <Link href="/checkout">

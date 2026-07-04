@@ -145,7 +145,7 @@ export default function OrderConfirmationPage() {
                 <div className="bg-card p-4 rounded-xl border space-y-2">
                   <div className="flex justify-between text-xs font-semibold">
                     <span>Order Total:</span>
-                    <span>${activeOrder.pricing.total.toFixed(2)}</span>
+                    <span>₹{activeOrder.pricing.total.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-xs font-semibold">
                     <span>Payment Method:</span>
@@ -317,7 +317,7 @@ export default function OrderConfirmationPage() {
                       <p className="text-xs text-muted-foreground mt-0.5">{item.description}</p>
                     </div>
                     <div className="text-right">
-                      <span className="font-bold text-sm block">${item.price.toFixed(2)}</span>
+                      <span className="font-bold text-sm block">₹{item.price.toFixed(2)}</span>
                       <span className="text-xs text-muted-foreground">Qty: {item.quantity}</span>
                     </div>
                   </div>
@@ -331,22 +331,22 @@ export default function OrderConfirmationPage() {
             <div className="max-w-xs ml-auto space-y-3 text-sm">
               <div className="flex justify-between text-muted-foreground">
                 <span>Subtotal</span>
-                <span className="font-semibold text-foreground">${activeOrder.pricing.subtotal.toFixed(2)}</span>
+                <span className="font-semibold text-foreground">₹{activeOrder.pricing.subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-muted-foreground">
                 <span>Shipping & Delivery</span>
                 <span className="font-semibold text-green-600">
-                  {activeOrder.pricing.shipping === 0 ? "FREE" : `$${activeOrder.pricing.shipping.toFixed(2)}`}
+                  {activeOrder.pricing.shipping === 0 ? "FREE" : `₹${activeOrder.pricing.shipping.toFixed(2)}`}
                 </span>
               </div>
               <div className="flex justify-between text-muted-foreground">
                 <span>Taxes & GST (8%)</span>
-                <span className="font-semibold text-foreground">${activeOrder.pricing.taxes.toFixed(2)}</span>
+                <span className="font-semibold text-foreground">₹{activeOrder.pricing.taxes.toFixed(2)}</span>
               </div>
               <div className="border-t border-border/80 my-2"></div>
               <div className="flex justify-between font-bold text-lg">
                 <span>Total Amount</span>
-                <span className="text-primary font-bold">${activeOrder.pricing.total.toFixed(2)}</span>
+                <span className="text-primary font-bold">₹{activeOrder.pricing.total.toFixed(2)}</span>
               </div>
             </div>
           </div>

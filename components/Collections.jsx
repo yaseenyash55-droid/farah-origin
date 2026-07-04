@@ -99,7 +99,7 @@ const Collections = () => {
                 {item.description}
               </p>
               <div className="mt-4 flex justify-between items-center">
-                <p className="text-xl font-bold text-primary">${item.price.toFixed(2)}</p>
+                <p className="text-xl font-bold text-primary">₹{item.price.toFixed(2)}</p>
                 <div className="text-primary font-semibold group-hover:underline">
                   View More &rarr;
                 </div>

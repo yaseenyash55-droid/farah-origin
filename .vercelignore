@@ -1,0 +1,10 @@
+node_modules/
+android/
+.next/
+.gradle/
+.git/
+out/
+scripts/
+*.rar
+*.zip
+*.tar.gz

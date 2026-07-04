@@ -1,7 +1,28 @@
+"use client";
+import React, { useEffect } from "react";
 import Link from 'next/link';
 import Navbar from "@/components/Navbar";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const { isLoggedIn, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !isLoggedIn) {
+      router.replace("/login");
+    }
+  }, [isLoggedIn, loading, router]);
+
+  if (loading || !isLoggedIn) {
+    return (
+      <main className="bg-background min-h-screen flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+      </main>
+    );
+  }
+
   return (
     <div className="min-h-screen">
 
