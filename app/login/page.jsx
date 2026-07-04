@@ -323,13 +323,6 @@ export default function LoginPage() {
                           OTP sent to <strong className="font-mono">{form.phone}</strong>. Please enter the verification code.
                         </div>
                       </div>
-                      {isSimulated && (
-                        <div className="mt-1 border-t border-border/50 pt-1.5 text-[10px] text-amber-600 dark:text-amber-400">
-                          ⚠️ Live OTP delivery variables are not set. The server is running in simulated demo mode. 
-                          <br />
-                          Use simulated code <strong className="font-mono text-xs text-primary font-bold">{generatedOtp || "..."}</strong>, master test code <strong className="font-mono text-xs text-primary font-bold">123456</strong>, or check the console to verify.
-                        </div>
-                      )}
                     </div>
 
                     <div>
