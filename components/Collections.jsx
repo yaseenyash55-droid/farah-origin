@@ -55,8 +55,22 @@ const collectionItems = [
   },
 ];
 
+import { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
+
 const Collections = () => {
   const { addToCart } = useCart();
+  const [items, setItems] = useState(collectionItems);
+
+  useEffect(() => {
+    const fetchLiveProducts = async () => {
+      const { data, error } = await supabase.from('products').select('*').eq('type', 'collection').order('created_at', { ascending: false });
+      if (!error && data && data.length > 0) {
+        setItems(data);
+      }
+    };
+    fetchLiveProducts();
+  }, []);
 
   const handleAddToCart = (e, item) => {
     e.preventDefault(); // Prevent navigation when clicking the button
@@ -74,8 +88,8 @@ const Collections = () => {
 
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {collectionItems.map((item) => (
-        <Link href={item.href} key={item.id} className="group">
+      {items.map((item) => (
+        <Link href={`/gallery?category=${item.category}`} key={item.id} className="group">
           <div className="bg-card rounded-xl shadow-lg overflow-hidden h-full flex flex-col transform transition-transform duration-300 group-hover:scale-105">
             <div className="relative">
               <img
@@ -99,7 +113,7 @@ const Collections = () => {
                 {item.description}
               </p>
               <div className="mt-4 flex justify-between items-center">
-                <p className="text-xl font-bold text-primary">₹{item.price.toFixed(2)}</p>
+                <p className="text-xl font-bold text-primary">₹{Number(item.price).toFixed(2)}</p>
                 <div className="text-primary font-semibold group-hover:underline">
                   View More &rarr;
                 </div>

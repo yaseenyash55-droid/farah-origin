@@ -1,7 +1,9 @@
 "use client";
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link'; // Keep Link for other navigations if any, or can be removed if not used.
+import Link from 'next/link'; 
+import BackButton from '@/components/BackButton';
+import { motion } from 'framer-motion';
 
 const OrderNowPage = () => {
   const router = useRouter();
@@ -54,8 +56,14 @@ const OrderNowPage = () => {
   };
 
   return (
-    <main className="bg-background text-foreground min-h-screen pt-20">
-      <div className="container mx-auto px-4 py-16">
+    <main className="bg-background/50 text-foreground min-h-screen pt-20 relative">
+      <BackButton />
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="container mx-auto px-4 py-16"
+      >
         <div className="max-w-3xl mx-auto">
           <h1 className="font-serif text-4xl md:text-5xl font-bold text-center mb-4">Place Your Custom Order</h1>
           <p className="text-center text-lg text-muted-foreground mb-12">
@@ -104,7 +112,7 @@ const OrderNowPage = () => {
             </div>
           </form>
         </div>
-      </div>
+      </motion.div>
     </main>
   );
 };

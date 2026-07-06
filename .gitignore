@@ -45,3 +45,6 @@ next-env.d.ts
 
 # android apk
 /public/farah-origin.apk
+/public/farah-origin-release.aab
+upload-keystore.jks
+keystore.properties

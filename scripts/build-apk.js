@@ -47,13 +47,12 @@ function main() {
   }
 
   // 3. Compile APK using Gradle
-  // We use assembleDebug because it is automatically signed with a debug key
-  // and can be easily installed on mobile devices without setting up signing keys.
-  console.log("\n[Step 3/4] Running Gradle assembleDebug (Compiling pre-signed installable APK)...");
+  // We use assembleRelease to build a signed production-ready APK
+  console.log("\n[Step 3/4] Running Gradle assembleRelease (Compiling signed release APK)...");
   
   // Choose correct gradlew command based on platform
   const isWindows = process.platform === "win32";
-  const gradleCmd = isWindows ? "gradlew.bat assembleDebug" : "./gradlew assembleDebug";
+  const gradleCmd = isWindows ? "gradlew.bat assembleRelease" : "./gradlew assembleRelease";
   
   if (!runCommand(gradleCmd, androidDir)) {
     console.error("Gradle build failed. Aborting.");
@@ -62,7 +61,7 @@ function main() {
 
   // 4. Locate and copy the compiled APK
   console.log("\n[Step 4/4] Locating and exporting APK...");
-  const apkSourcePath = path.join(androidDir, "app", "build", "outputs", "apk", "debug", "app-debug.apk");
+  const apkSourcePath = path.join(androidDir, "app", "build", "outputs", "apk", "release", "app-release.apk");
   const apkDestPath = path.join(publicDir, "farah-origin.apk");
 
   if (fs.existsSync(apkSourcePath)) {

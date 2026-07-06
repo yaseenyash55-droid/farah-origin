@@ -4,6 +4,8 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BackButton from "@/components/BackButton";
+import { motion } from "framer-motion";
 import { 
   User, 
   Mail, 
@@ -146,10 +148,16 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="bg-background text-foreground min-h-screen pt-20">
+    <main className="bg-background/50 text-foreground min-h-screen pt-20 relative">
       <Navbar />
+      <BackButton />
 
-      <div className="container mx-auto px-4 py-16 max-w-4xl">
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="container mx-auto px-4 py-16 max-w-4xl"
+      >
         
         {/* Flipkart split card layout */}
         <div className="bg-card border border-border rounded-3xl shadow-xl overflow-hidden grid md:grid-cols-5 min-h-[500px]">
@@ -380,7 +388,7 @@ export default function LoginPage() {
 
         </div>
 
-      </div>
+      </motion.div>
 
       <Footer />
     </main>

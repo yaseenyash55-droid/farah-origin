@@ -14,6 +14,8 @@ import {
   ShieldCheck,
   ChevronRight
 } from "lucide-react";
+import BackButton from "@/components/BackButton";
+import { motion } from "framer-motion";
 
 export default function DownloadPage() {
   const [activeTab, setActiveTab] = useState("android");
@@ -43,10 +45,16 @@ export default function DownloadPage() {
   };
 
   return (
-    <main className="bg-background text-foreground min-h-screen pt-20">
+    <main className="bg-background/50 text-foreground min-h-screen pt-20 relative">
       <Navbar />
+      <BackButton />
 
-      <div className="container mx-auto px-4 py-16 max-w-5xl">
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="container mx-auto px-4 py-16 max-w-5xl"
+      >
         {/* Header Section */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="inline-block px-4 py-1.5 rounded-full bg-secondary text-secondary-foreground font-semibold text-xs tracking-wider uppercase mb-4">
@@ -363,9 +371,8 @@ export default function DownloadPage() {
             </div>
 
           </div>
-
         </div>
-      </div>
+      </motion.div>
 
       <Footer />
     </main>

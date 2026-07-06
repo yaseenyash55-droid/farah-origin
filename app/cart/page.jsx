@@ -3,6 +3,8 @@ import React from 'react';
 import { useCart } from '@/context/CartContext';
 import { ShoppingCart, Plus, Minus, Trash2 } from 'lucide-react';
 import Link from 'next/link';
+import BackButton from '@/components/BackButton';
+import { motion } from 'framer-motion';
 
 const CartPage = () => {
   const { items: cartItems, updateQuantity, removeFromCart } = useCart();
@@ -12,8 +14,14 @@ const CartPage = () => {
   const total = subtotal + shipping;
 
   return (
-    <main className="bg-background text-foreground min-h-screen pt-20">
-      <div className="container mx-auto px-4 py-16">
+    <main className="bg-background/50 text-foreground min-h-screen pt-20 relative">
+      <BackButton />
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="container mx-auto px-4 py-16"
+      >
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-center gap-4 mb-12">
             <ShoppingCart size={40} className="text-primary" />
@@ -88,7 +96,7 @@ const CartPage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </main>
   );
 };

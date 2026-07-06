@@ -1,5 +1,9 @@
+"use client";
+
 import React from 'react';
 import { Star, StarHalf } from 'lucide-react';
+import BackButton from '@/components/BackButton';
+import { motion } from 'framer-motion';
 
 const ReviewsPage = () => {
   const testimonials = [
@@ -61,33 +65,44 @@ const ReviewsPage = () => {
   };
 
   return (
-    <main className="bg-background text-foreground min-h-screen pt-20">
+    <main className="bg-background/50 text-foreground min-h-screen pt-20 relative">
+      <BackButton />
       <div className="container mx-auto px-4 py-16">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center max-w-3xl mx-auto mb-16"
+        >
           <h1 className="font-serif text-4xl md:text-5xl font-bold mb-4">Words of Appreciation</h1>
           <p className="text-lg text-muted-foreground">
             Hear from our wonderful clients who have experienced the magic of Farah Origin firsthand.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
-            <div key={index} className="bg-card border border-border rounded-xl p-8 flex flex-col">
+            <motion.div 
+              key={index} 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              whileHover={{ y: -5, scale: 1.02 }}
+              className="bg-card border border-border rounded-xl p-8 flex flex-col cursor-pointer shadow-sm hover:shadow-xl transition-all"
+            >
               <div className="flex-grow mb-4">
                 <p className="text-card-foreground italic">"{testimonial.quote}"</p>
               </div>
               <div className="flex items-center gap-4 mt-6">
-                {/* <img src={testimonial.avatar} alt={testimonial.name} className="w-14 h-14 rounded-full object-cover"/> */}
                 <div>
                   <p className="font-semibold text-lg">{testimonial.name}</p>
-
                   <p className="text-sm text-muted-foreground">{testimonial.title}</p>
                 </div>
                 <div className="ml-auto">
                   {renderStars(testimonial.rating)}
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

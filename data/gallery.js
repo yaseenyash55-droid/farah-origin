@@ -26,6 +26,34 @@ export const galleryItems = [
     category: "crochet",
     image: "https://images.unsplash.com/photo-1559251606-c623743a6d76?auto=format&fit=crop&w=800&q=80",
     description: "Premium plush cotton plushie for gifting."
+  },
+  {
+    id: 5,
+    title: "Crochet Sunflower",
+    category: "crochet",
+    image: "https://images.unsplash.com/photo-1596431940910-c44d715d319e?auto=format&fit=crop&w=800&q=80",
+    description: "Bright and cheerful crochet sunflower."
+  },
+  {
+    id: 6,
+    title: "Festive Henna Art",
+    category: "henna",
+    image: "https://images.unsplash.com/photo-1587823522108-66236b3b5c68?auto=format&fit=crop&w=800&q=80",
+    description: "Detailed festive mehendi for special events."
+  },
+  {
+    id: 7,
+    title: "Crochet Granny Square Blanket",
+    category: "crochet",
+    image: "https://images.unsplash.com/photo-1606721591552-094191a7201c?auto=format&fit=crop&w=800&q=80",
+    description: "Cozy colorful traditional blanket."
+  },
+  {
+    id: 8,
+    title: "Intricate Bridal Henna",
+    category: "henna",
+    image: "https://images.unsplash.com/photo-1628157790858-39e7c53d169d?auto=format&fit=crop&w=800&q=80",
+    description: "Full hand traditional bridal design."
   }
 ];
 

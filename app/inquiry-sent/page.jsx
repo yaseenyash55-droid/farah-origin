@@ -3,6 +3,8 @@ import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { MailCheck } from 'lucide-react';
 import Link from 'next/link';
+import BackButton from '@/components/BackButton';
+import { motion } from 'framer-motion';
 
 const InquiryDetails = () => {
   const searchParams = useSearchParams();
@@ -16,7 +18,12 @@ const InquiryDetails = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-card p-8 md:p-12 rounded-lg border border-border shadow-lg">
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5 }}
+      className="max-w-3xl mx-auto bg-card p-8 md:p-12 rounded-lg border border-border shadow-lg"
+    >
       
       <div className="text-center mb-10">
         <MailCheck size={60} className="text-green-500 mx-auto mb-4" />
@@ -60,13 +67,14 @@ const InquiryDetails = () => {
         </Link>
       </div>
 
-    </div>
+    </motion.div>
   );
 };
 
 const InquirySentPage = () => {
   return (
-    <main className="bg-background text-foreground min-h-screen pt-20">
+    <main className="bg-background/50 text-foreground min-h-screen pt-20 relative">
+      <BackButton />
       <div className="container mx-auto px-4 py-16">
         <Suspense fallback={<div>Loading...</div>}>
           <InquiryDetails />

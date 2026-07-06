@@ -1,11 +1,23 @@
 "use client";
-import { useState } from "react";
-import { galleryItems } from "@/data/gallery";
+import { useState, useEffect } from "react";
+import { galleryItems as mockGalleryItems } from "@/data/gallery";
 import { X, ExternalLink } from "lucide-react";
+import { supabase } from "../lib/supabase";
 
 export default function Gallery({ showTitle = true }) {
   const [filter, setFilter] = useState("all");
   const [activeImage, setActiveImage] = useState(null);
+  const [galleryItems, setGalleryItems] = useState(mockGalleryItems);
+
+  useEffect(() => {
+    const fetchGallery = async () => {
+      const { data, error } = await supabase.from('products').select('*').eq('type', 'gallery').order('created_at', { ascending: false });
+      if (!error && data && data.length > 0) {
+        setGalleryItems(data);
+      }
+    };
+    fetchGallery();
+  }, []);
 
   const filteredItems = filter === "all" ? galleryItems : galleryItems.filter(item => item.category === filter);
 
@@ -31,7 +43,7 @@ export default function Gallery({ showTitle = true }) {
               key={cat}
               onClick={() => setFilter(cat)}
               className={`px-5 py-2 rounded-full text-xs uppercase tracking-wider transition-all ${
-                filter === cat ? "bg-[var(--accent)] text-[#0d0c0c] font-semibold" : "border border-[var(--border)] hover:border-[var(--accent)] text-[var(--foreground)]"
+                filter === cat ? "bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.3)]" : "border border-white/30 hover:border-white text-white/70 hover:text-white"
               }`}
             >
               {cat}
