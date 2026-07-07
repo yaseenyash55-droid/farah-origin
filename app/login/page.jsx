@@ -30,6 +30,24 @@ export default function LoginPage() {
   const [errors, setErrors] = useState({});
   const [isSimulated, setIsSimulated] = useState(false);
   const [resendTimer, setResendTimer] = useState(0);
+  const [userOrders, setUserOrders] = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState(false);
+
+  useEffect(() => {
+    if (isLoggedIn && user?.email) {
+      setLoadingOrders(true);
+      fetch(`/api/orders?email=${encodeURIComponent(user.email)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) setUserOrders(data);
+          setLoadingOrders(false);
+        })
+        .catch(err => {
+          console.error('Error fetching orders:', err);
+          setLoadingOrders(false);
+        });
+    }
+  }, [isLoggedIn, user]);
 
   useEffect(() => {
     if (resendTimer > 0) {
@@ -68,7 +86,7 @@ export default function LoginPage() {
     setResendTimer(30);
 
     // Dispatch OTP to the recipient via Email/SMS API
-    fetch("/api/send-otp", {
+    fetch("https://farah-origin.vercel.app/api/send-otp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -84,6 +102,10 @@ export default function LoginPage() {
       if (data.success && data.otp) {
         setGeneratedOtp(data.otp);
         console.log("OTP generated on server:", data.otp);
+        // Show an alert on mobile so the user actually sees the simulated OTP!
+        if (data.simulated) {
+           setTimeout(() => alert(`[TEST MODE] Your simulated OTP is: ${data.otp}`), 500);
+        }
       }
     })
     .catch(err => {
@@ -100,7 +122,7 @@ export default function LoginPage() {
     setUserOtpInput("");
     setErrors({});
 
-    fetch("/api/send-otp", {
+    fetch("https://farah-origin.vercel.app/api/send-otp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -116,6 +138,9 @@ export default function LoginPage() {
       if (data.success && data.otp) {
         setGeneratedOtp(data.otp);
         console.log("OTP resent & generated on server:", data.otp);
+        if (data.simulated) {
+           setTimeout(() => alert(`[TEST MODE] Your simulated OTP is: ${data.otp}`), 500);
+        }
       }
     })
     .catch(err => {
@@ -237,7 +262,45 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                <div className="pt-4 border-t flex flex-col sm:flex-row gap-3">
+                {/* Orders History section */}
+                <div className="space-y-3.5 pt-2 border-t mt-4 border-border/50">
+                  <h4 className="font-bold text-xs uppercase tracking-widest text-muted-foreground flex justify-between">
+                    <span>Order History & Tracking</span>
+                    <span className="text-[10px] text-primary">{userOrders.length} Orders</span>
+                  </h4>
+                  
+                  {loadingOrders ? (
+                    <div className="text-xs text-center p-4 text-muted-foreground">Loading orders...</div>
+                  ) : userOrders.length > 0 ? (
+                    <div className="space-y-2 text-xs max-h-[250px] overflow-y-auto pr-1">
+                      {userOrders.map((order) => (
+                        <div key={order.id} className="bg-secondary/10 border border-border/40 p-3 rounded-xl flex justify-between items-center">
+                          <div>
+                            <p className="font-semibold">Order #{order.id.substring(0,8)}</p>
+                            <p className="text-[10px] text-muted-foreground mt-0.5">{new Date(order.order_date).toLocaleDateString()}</p>
+                          </div>
+                          <div className="text-right">
+                            <span className="inline-block px-2 py-1 bg-primary/10 text-primary rounded-full text-[10px] font-bold uppercase tracking-wider mb-1">
+                              {order.status}
+                            </span>
+                            <button 
+                              onClick={() => router.push(`/track?orderId=${order.id}`)}
+                              className="block text-[10px] text-blue-500 hover:underline font-semibold"
+                            >
+                              Track Order
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-xs text-center p-4 border border-dashed rounded-xl border-border/50 text-muted-foreground">
+                      You haven't placed any orders yet.
+                    </div>
+                  )}
+                </div>
+
+                <div className="pt-4 flex flex-col sm:flex-row gap-3">
                   <button 
                     onClick={() => router.push("/gallery")}
                     className="flex-1 bg-primary text-primary-foreground py-3.5 rounded-2xl font-bold hover:bg-primary/95 transition text-sm text-center shadow-md shadow-primary/10"

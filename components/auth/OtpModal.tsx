@@ -35,13 +35,14 @@ export default function OtpModal({ isOpen, onClose }: OtpModalProps) {
     setError('');
     
     try {
-      const res = await fetch('/api/auth/send-otp', {
+      const res = await fetch("https://farah-origin.vercel.app/api/auth/send-otp", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contact, method }),
       });
       
       if (res.ok) {
+        const data = await res.json();
         setStep('verify');
         setTimeLeft(30); // 30 second cooldown!
       } else {
@@ -61,7 +62,7 @@ export default function OtpModal({ isOpen, onClose }: OtpModalProps) {
     setError('');
     
     try {
-      const res = await fetch('/api/auth/verify-otp', {
+      const res = await fetch("https://farah-origin.vercel.app/api/auth/verify-otp", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contact, otp }),

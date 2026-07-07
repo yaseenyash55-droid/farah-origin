@@ -67,8 +67,35 @@ export async function POST(request) {
     const twilioSid = process.env.TWILIO_ACCOUNT_SID;
     const twilioToken = process.env.TWILIO_AUTH_TOKEN;
     const twilioFrom = process.env.TWILIO_PHONE_NUMBER;
+    const fast2smsAuth = process.env.FAST2SMS_API_KEY;
 
-    if (twilioSid && twilioToken && twilioFrom && phone) {
+    if (fast2smsAuth && phone) {
+      try {
+        const response = await fetch("https://www.fast2sms.com/dev/bulkV2", {
+          method: "POST",
+          headers: {
+            "authorization": fast2smsAuth,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            route: "q",
+            message: `Your Farah Origin Verification Code is: ${otpCode}. Valid for 10 minutes.`,
+            flash: 0,
+            numbers: phone.replace("+91", "").replace(/\s/g, ""),
+          })
+        });
+        
+        const data = await response.json();
+        if (data.return) {
+          smsSent = true;
+        } else {
+          errors.sms = data.message || "Fast2SMS Error";
+        }
+      } catch (err) {
+        console.error("Fast2SMS error:", err.message);
+        errors.sms = err.message;
+      }
+    } else if (twilioSid && twilioToken && twilioFrom && phone) {
       try {
         const twilio = require("twilio");
         const client = twilio(twilioSid, twilioToken);

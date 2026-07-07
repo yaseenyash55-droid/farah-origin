@@ -17,24 +17,33 @@ export default function PaymentForm({ amount, onSuccess }: PaymentFormProps) {
     setLoading(true);
     
     try {
-      // If we are in test mode without real keys, simulate a successful payment instantly
       if (!process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID === "rzp_test_dummykey") {
         alert("TEST MODE: Simulating payment success since no real Razorpay key is configured.");
-        const internalOrderId = `ORD-${Math.floor(100000 + Math.random() * 900000)}`;
-        localStorage.setItem(`order_status_${internalOrderId}`, 'placed');
-        localStorage.setItem(`order_details_${internalOrderId}`, JSON.stringify({
-          amount,
-          contact: 'test_user',
-          date: new Date().toISOString()
-        }));
+        const internalOrderId = `FO-${Math.floor(100000 + Math.random() * 900000)}`;
+        
+        // Save to Supabase using new API
+        await fetch("/api/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            orderNumber: internalOrderId,
+            orderDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+            items: [{ id: "custom", name: "Custom Farah Origin Order", price: amount, quantity: 1, image: "/logo.png" }],
+            shippingAddress: { name: "Direct Payment", phone: "N/A", addressLine1: "Online Order", city: "N/A", state: "N/A", zip: "N/A" },
+            paymentMethod: "Razorpay (Test)",
+            pricing: { subtotal: amount, shipping: 0, taxes: 0, total: amount },
+            emailNotificationSent: false
+          })
+        });
+
         if (onSuccess) onSuccess(internalOrderId);
-        router.push(`/track?orderId=${internalOrderId}`);
+        router.push(`/thank-you?orderId=${internalOrderId}`);
         setLoading(false);
         return;
       }
 
       // 1. Create order on our backend (which uses Razorpay)
-      const res = await fetch("/api/checkout/create-order", {
+      const res = await fetch("https://farah-origin.vercel.app/api/checkout/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount }),
@@ -59,21 +68,27 @@ export default function PaymentForm({ amount, onSuccess }: PaymentFormProps) {
           console.log("Payment Successful!", response);
           
           // Generate an internal order ID
-          const internalOrderId = `ORD-${Math.floor(100000 + Math.random() * 900000)}`;
+          const internalOrderId = `FO-${Math.floor(100000 + Math.random() * 900000)}`;
           
-          // We would normally save this to Supabase here
-          // Fallback to localStorage for now
-          localStorage.setItem(`order_status_${internalOrderId}`, 'placed');
-          localStorage.setItem(`order_details_${internalOrderId}`, JSON.stringify({
-            amount,
-            contact: 'user', // We should capture contact info before payment, but this is a simplified flow
-            date: new Date().toISOString()
-          }));
+          // Save to Supabase using new API
+          await fetch("/api/orders", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              orderNumber: internalOrderId,
+              orderDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+              items: [{ id: "custom", name: "Custom Farah Origin Order", price: amount, quantity: 1, image: "/logo.png" }],
+              shippingAddress: { name: "Direct Payment", phone: "N/A", addressLine1: "Online Order", city: "N/A", state: "N/A", zip: "N/A" },
+              paymentMethod: "Razorpay",
+              pricing: { subtotal: amount, shipping: 0, taxes: 0, total: amount },
+              emailNotificationSent: false
+            })
+          });
 
           if (onSuccess) {
             onSuccess(internalOrderId);
           }
-          router.push(`/track?orderId=${internalOrderId}`);
+          router.push(`/thank-you?orderId=${internalOrderId}`);
         },
         prefill: {
           name: "Customer",

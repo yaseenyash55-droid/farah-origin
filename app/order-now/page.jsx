@@ -31,7 +31,7 @@ const OrderNowPage = () => {
     setError(null);
 
     try {
-      const response = await fetch('/api/inquiry', {
+      const response = await fetch("https://farah-origin.vercel.app/api/inquiry", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
+import { supabase } from '../../../lib/supabase';
 
 export async function POST(request) {
   try {
@@ -11,32 +10,25 @@ export async function POST(request) {
       return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
     }
 
-    const newInquiry = {
-      id: Date.now(),
-      ...data,
-      submittedAt: new Date().toISOString(),
-    };
+    const { data: insertedData, error } = await supabase
+      .from('inquiries')
+      .insert([
+        {
+          full_name: data.fullName,
+          email: data.email,
+          phone: data.phone || null,
+          interest: data.interest,
+          message: data.message
+        }
+      ]);
 
-    const filePath = path.join(process.cwd(), 'data', 'inquiries.json');
-    
-    let inquiries = [];
-    try {
-      const fileContent = await fs.readFile(filePath, 'utf-8');
-      inquiries = JSON.parse(fileContent);
-    } catch (error) {
-      // File doesn't exist or is empty, start with an empty array
-      if (error.code !== 'ENOENT') {
-        throw error;
-      }
+    if (error) {
+      console.error('Supabase error inserting inquiry:', error);
+      throw error;
     }
 
-    inquiries.push(newInquiry);
-
-    await fs.writeFile(filePath, JSON.stringify(inquiries, null, 2), 'utf-8');
-
     return NextResponse.json({ 
-      message: 'Inquiry submitted successfully!',
-      inquiry: newInquiry 
+      message: 'Inquiry submitted successfully!'
     }, { status: 201 });
 
   } catch (error) {

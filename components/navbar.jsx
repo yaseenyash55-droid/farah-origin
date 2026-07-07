@@ -12,9 +12,17 @@ export default function Navbar() {
   const router = useRouter();
   const isHome = pathname === "/";
   const { user, isLoggedIn, logout } = useAuth();
+  const [isCapacitor, setIsCapacitor] = useState(false);
 
   // Lock body scroll when mobile drawer is open
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const ua = navigator.userAgent || navigator.vendor || window.opera;
+      if (window.Capacitor || ua.includes("wv") || (ua.includes("Android") && ua.includes("Version/"))) {
+        setIsCapacitor(true);
+      }
+    }
+    
     if (isOpen) {
       document.body.classList.add("overflow-hidden");
     } else {
@@ -28,8 +36,11 @@ export default function Navbar() {
     { href: "/reviews", label: "Reviews" },
     { href: "/view-collection", label: "Collection" },
     { href: "/contact-us", label: "Contact" },
-    { href: "/download", label: "Install App" },
   ];
+
+  if (!isCapacitor) {
+    navLinks.push({ href: "/download", label: "Install App" });
+  }
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-background/80 backdrop-blur-lg border-b border-border">

@@ -16,53 +16,50 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // In a real app, this fetches from Supabase.
-    // For now, we simulate fetching by reading all localStorage keys that start with "order_status_"
     const fetchOrders = () => {
-      const loadedOrders: Order[] = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith('order_status_')) {
-          const id = key.replace('order_status_', '');
-          const status = localStorage.getItem(key) || 'placed';
-          
-          let amount = 499;
-          let contact = 'customer@example.com';
-          let date = new Date().toISOString();
-          
-          const detailsStr = localStorage.getItem(`order_details_${id}`);
-          if (detailsStr) {
-            try {
-              const details = JSON.parse(detailsStr);
-              amount = details.amount || 499;
-              contact = details.contact || 'customer@example.com';
-              date = details.date || date;
-            } catch (e) {}
+      fetch("/api/orders")
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) {
+            const mappedOrders = data.map((o: any) => ({
+              id: o.id,
+              amount: o.pricing?.total || 0,
+              contact: o.recipient_email || o.user_phone || "customer@example.com",
+              status: o.status,
+              date: o.order_date
+            }));
+            setOrders(mappedOrders);
           }
-          
-          loadedOrders.push({ id, status, amount, contact, date });
-        }
-      }
-      
-      // Sort by date newest first
-      loadedOrders.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-      setOrders(loadedOrders);
-      setLoading(false);
+        })
+        .catch(e => console.error("Error fetching admin orders:", e))
+        .finally(() => setLoading(false));
     };
 
     fetchOrders();
     
-    // Poll every 5 seconds for new orders (simulating realtime DB)
+    // Poll every 5 seconds for new orders (simulating realtime DB subscriptions)
     const interval = setInterval(fetchOrders, 5000);
     return () => clearInterval(interval);
   }, []);
 
-  const updateStatus = (orderId: string, newStatus: string) => {
-    // In a real app, update Supabase here.
-    localStorage.setItem(`order_status_${orderId}`, newStatus);
-    
+  const updateStatus = async (orderId: string, newStatus: string) => {
     // Optimistic UI update
     setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
+    
+    // Update Supabase via API
+    try {
+      const res = await fetch("/api/orders", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: orderId, status: newStatus })
+      });
+      if (!res.ok) {
+        throw new Error("Failed to update status");
+      }
+    } catch (e) {
+      console.error("Error updating status:", e);
+      alert("Failed to update order status.");
+    }
   };
 
   if (loading) {
@@ -76,9 +73,14 @@ export default function AdminDashboard() {
       <main className="container mx-auto px-6 py-12">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <span className="bg-pink-100 text-pink-700 px-4 py-2 rounded-full font-medium text-sm">
-            {orders.length} Total Orders
-          </span>
+          <div className="flex items-center gap-4">
+            <a href="/admin/inventory" className="bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium text-sm hover:bg-primary/90 transition">
+              Manage Products
+            </a>
+            <span className="bg-pink-100 text-pink-700 px-4 py-2 rounded-full font-medium text-sm">
+              {orders.length} Total Orders
+            </span>
+          </div>
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">

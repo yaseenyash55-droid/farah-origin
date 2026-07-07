@@ -24,40 +24,23 @@ function TrackOrderContent() {
     if (orderId === "Unknown") return;
     
     const checkStatus = () => {
-      const savedStatus = localStorage.getItem(`order_status_${orderId}`);
-      if (savedStatus && savedStatus !== status) {
-        setStatus(savedStatus as OrderStatus);
-      }
+      fetch(`/api/orders?id=${orderId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.status && data.status !== status) {
+            setStatus(data.status as OrderStatus);
+          }
+        })
+        .catch(e => console.error("Error fetching order status:", e));
     };
     
     // Initial check
     checkStatus();
     
-    // Poll every 2 seconds to simulate realtime DB updates from the Admin dashboard
-    const interval = setInterval(checkStatus, 2000);
+    // Poll every 5 seconds for realtime DB updates
+    const interval = setInterval(checkStatus, 5000);
     return () => clearInterval(interval);
   }, [orderId, status]);
-
-  const advanceStatus = () => {
-    const currentIndex = STATUS_STEPS.findIndex(s => s.id === status);
-    if (currentIndex < STATUS_STEPS.length - 1) {
-      const nextStatus = STATUS_STEPS[currentIndex + 1].id as OrderStatus;
-      setStatus(nextStatus);
-      localStorage.setItem(`order_status_${orderId}`, nextStatus);
-      
-      // Trigger notification (Mocking push notification logic in browser for now)
-      if (typeof window !== 'undefined' && 'Notification' in window) {
-        Notification.requestPermission().then(permission => {
-          if (permission === 'granted') {
-            new Notification('Farah Origin - Order Update', {
-              body: `Your order ${orderId} is now ${nextStatus}!`,
-              icon: '/favicon.ico'
-            });
-          }
-        });
-      }
-    }
-  };
 
   return (
     <div className="bg-white rounded-3xl shadow-lg border border-pink-100 p-8">
@@ -108,17 +91,7 @@ function TrackOrderContent() {
         <p className="text-pink-700 font-bold">8438440625</p>
       </div>
 
-      {/* Simulator controls - Only for testing */}
-      <div className="mt-12 pt-8 border-t border-gray-100">
-        <p className="text-sm text-gray-400 text-center mb-4">Developer Tools (Simulation)</p>
-        <button 
-          onClick={advanceStatus}
-          disabled={status === 'delivered'}
-          className="w-full bg-gray-900 text-white rounded-xl py-3 font-medium hover:bg-gray-800 disabled:opacity-50 transition"
-        >
-          Simulate: Move to Next Status (Triggers Notification)
-        </button>
-      </div>
+
 
     </div>
   );

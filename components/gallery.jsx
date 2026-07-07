@@ -43,7 +43,7 @@ export default function Gallery({ showTitle = true }) {
               key={cat}
               onClick={() => setFilter(cat)}
               className={`px-5 py-2 rounded-full text-xs uppercase tracking-wider transition-all ${
-                filter === cat ? "bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.3)]" : "border border-white/30 hover:border-white text-white/70 hover:text-white"
+                filter === cat ? "bg-primary text-primary-foreground font-bold shadow-lg shadow-primary/20" : "border border-border hover:border-primary/50 text-muted-foreground hover:text-foreground"
               }`}
             >
               {cat}

@@ -153,7 +153,7 @@ export default function CheckoutPage() {
     setResendTimer(30);
 
     // Send OTP to user's real email/phone via API
-    fetch("/api/send-otp", {
+    fetch("https://farah-origin.vercel.app/api/send-otp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -169,6 +169,9 @@ export default function CheckoutPage() {
       if (data.success && data.otp) {
         setGeneratedOtp(data.otp);
         console.log("Checkout OTP generated on server:", data.otp);
+        if (data.simulated) {
+           setTimeout(() => alert(`[TEST MODE] Your simulated OTP is: ${data.otp}`), 500);
+        }
       }
     })
     .catch(err => {
@@ -186,7 +189,7 @@ export default function CheckoutPage() {
     setUserOtpInput("");
     setLoginErrors({});
 
-    fetch("/api/send-otp", {
+    fetch("https://farah-origin.vercel.app/api/send-otp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -202,6 +205,9 @@ export default function CheckoutPage() {
       if (data.success && data.otp) {
         setGeneratedOtp(data.otp);
         console.log("Checkout OTP resent & generated on server:", data.otp);
+        if (data.simulated) {
+           setTimeout(() => alert(`[TEST MODE] Your simulated OTP is: ${data.otp}`), 500);
+        }
       }
     })
     .catch(err => {
@@ -395,13 +401,27 @@ export default function CheckoutPage() {
       recipientEmail: user?.email || loginForm.email
     };
 
-    // 3. Save order data and trigger notification
-    localStorage.setItem("lastOrder", JSON.stringify(orderData));
-    await triggerNotification(orderNumber);
+    // 3. Save order data to Supabase and trigger notification
+    try {
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderData)
+      });
+      
+      if (!res.ok) {
+        throw new Error("Failed to save order to database");
+      }
+      
+      await triggerNotification(orderNumber);
 
-    // 4. Clear cart and route to Order Confirmation
-    clearCart();
-    router.push("/order-confirmation");
+      // 4. Clear cart and route to Thank You page
+      clearCart();
+      router.push(`/thank-you?orderId=${orderNumber}`);
+    } catch (error) {
+      console.error("Order placement error:", error);
+      alert("There was an error placing your order. Please try again.");
+    }
   };
 
   if (cartItems.length === 0) {

@@ -19,14 +19,15 @@ export async function POST(req: Request) {
     // For now we'll just log it to the console for demonstration
     console.log(`Generated OTP for ${contact}: ${otp}`);
 
-    let success = false;
+    let result: { success: boolean; simulated?: boolean } = { success: false, simulated: false };
     if (method === 'sms') {
-      success = await sendSMS(contact, otp);
+      result = await sendSMS(contact, otp);
     } else if (method === 'email') {
-      success = await sendEmail(contact, otp);
+      const emailSuccess = await sendEmail(contact, otp);
+      result = { success: emailSuccess };
     }
 
-    if (success) {
+    if (result.success) {
       return NextResponse.json({ message: 'OTP sent successfully' });
     } else {
       return NextResponse.json({ error: 'Failed to send OTP' }, { status: 500 });

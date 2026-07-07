@@ -21,6 +21,8 @@ function runCommand(command, cwd) {
 function main() {
   console.log("=== FARAH ORIGIN APK EXPORT PIPELINE ===");
 
+  process.env.BUILD_APK = 'true';
+
   // 1. Build static Next.js assets
   console.log("\n[Step 1/4] Compiling Next.js Web App...");
   if (!runCommand("npm run build:static", rootDir)) {

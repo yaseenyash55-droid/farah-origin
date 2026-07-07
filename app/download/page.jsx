@@ -338,7 +338,7 @@ export default function DownloadPage() {
               <div className="mt-6 pt-6 border-t border-border space-y-3 text-left text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Version:</span>
-                  <span className="font-semibold">1.0.0 (Capacitor v8)</span>
+                  <span className="font-semibold">2.0.1 (API Connect Fix)</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Package name:</span>

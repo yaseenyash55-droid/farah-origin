@@ -25,10 +25,21 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = (userData) => {
+  const login = async (userData) => {
     setUser(userData);
     if (typeof window !== "undefined") {
       localStorage.setItem("currentUser", JSON.stringify(userData));
+    }
+    
+    // Save to database
+    try {
+      await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+      });
+    } catch (e) {
+      console.error("Failed to register user to DB", e);
     }
   };
 

@@ -13,6 +13,16 @@ export default function Home() {
   const { isLoggedIn, loading } = useAuth();
   const router = useRouter();
   const [isOtpOpen, setIsOtpOpen] = useState(false);
+  const [isCapacitor, setIsCapacitor] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const ua = navigator.userAgent || navigator.vendor || window.opera;
+      if (window.Capacitor || ua.includes("wv") || (ua.includes("Android") && ua.includes("Version/"))) {
+        setIsCapacitor(true);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     // If not logged in, we can let them browse but encourage OTP sign in
@@ -85,9 +95,11 @@ export default function Home() {
                 Sign In (OTP)
               </button>
 
-              <a href="/farah-origin.apk" download className="bg-green-600 text-white px-8 py-4 rounded-xl hover:bg-green-700 transition">
-                Download APK
-              </a>
+              {!isCapacitor && (
+                <a href="/farah-origin.apk" download className="bg-green-600 text-white px-8 py-4 rounded-xl hover:bg-green-700 transition">
+                  Download APK
+                </a>
+              )}
 
             </div>
 

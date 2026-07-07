@@ -1,5 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { 
   CheckCircle, 
   Printer, 
@@ -19,22 +20,40 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
-export default function OrderConfirmationPage() {
+function OrderConfirmationContent() {
+  const searchParams = useSearchParams();
+  const orderId = searchParams.get("orderId");
+  
   const [order, setOrder] = useState(null);
   const [showEmailPreview, setShowEmailPreview] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const savedOrder = localStorage.getItem("lastOrder");
-      if (savedOrder) {
-        try {
-          setOrder(JSON.parse(savedOrder));
-        } catch (e) {
-          console.error("Error parsing saved order:", e);
-        }
-      }
+    if (orderId) {
+      fetch(`/api/orders?id=${orderId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (!data.error) {
+            // Remap database fields to match the UI's expected shape if necessary
+            // e.g. mapping order_number -> orderNumber, shipping_address -> shippingAddress
+            setOrder({
+              orderNumber: data.id,
+              orderDate: new Date(data.order_date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }),
+              items: data.items,
+              shippingAddress: data.shipping_address,
+              paymentMethod: data.payment_method,
+              pricing: data.pricing,
+              recipientEmail: data.recipient_email,
+              emailNotificationSent: true
+            });
+          }
+        })
+        .catch(e => console.error("Error fetching order:", e))
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
     }
-  }, []);
+  }, [orderId]);
 
   const handlePrint = () => {
     if (typeof window !== "undefined") {
@@ -92,11 +111,16 @@ export default function OrderConfirmationPage() {
     return d.toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
   };
 
-  return (
-    <main className="bg-background text-foreground min-h-screen pt-20 print:pt-0">
-      <Navbar />
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-20 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
-      <div className="container mx-auto px-4 py-16 max-w-4xl print:py-4">
+  return (
+    <div className="container mx-auto px-4 py-16 max-w-4xl print:py-4">
         
         {/* Receipt Container */}
         <div className="bg-card border border-border p-8 md:p-12 rounded-3xl shadow-xl space-y-8 print:border-none print:shadow-none print:p-0">
@@ -372,7 +396,20 @@ export default function OrderConfirmationPage() {
 
         </div>
       </div>
+  );
+}
 
+export default function OrderConfirmationPage() {
+  return (
+    <main className="bg-background text-foreground min-h-screen pt-20 print:pt-0">
+      <Navbar />
+      <Suspense fallback={
+        <div className="min-h-screen pt-20 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        </div>
+      }>
+        <OrderConfirmationContent />
+      </Suspense>
       <Footer />
     </main>
   );

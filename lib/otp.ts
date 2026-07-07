@@ -11,10 +11,40 @@ export const generateOTP = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
-export const sendSMS = async (to: string, otp: string) => {
+export const sendSMS = async (to: string, otp: string): Promise<{ success: boolean, simulated?: boolean }> => {
+  const fast2smsAuth = process.env.FAST2SMS_API_KEY;
+
+  if (fast2smsAuth) {
+    try {
+      const response = await fetch("https://www.fast2sms.com/dev/bulkV2", {
+        method: "POST",
+        headers: {
+          "authorization": fast2smsAuth,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          route: "q",
+          message: `Your Farah Origin Verification Code is: ${otp}. Valid for 10 minutes.`,
+          flash: 0,
+          numbers: to.replace("+91", "").replace(/\s/g, ""),
+        })
+      });
+      const data = await response.json();
+      if (data.return) {
+        return { success: true };
+      } else {
+        console.error("Fast2SMS API error:", data.message);
+        return { success: false };
+      }
+    } catch (err) {
+      console.error("Fast2SMS fetch error:", err);
+      return { success: false };
+    }
+  }
+
   if (!accountSid || !accountSid.startsWith('AC') || !authToken || !twilioPhoneNumber) {
-    console.warn('Twilio credentials missing or invalid. Simulating SMS OTP:', otp);
-    return true;
+    console.error('Twilio credentials missing or invalid. SMS failed.');
+    return { success: false };
   }
   
   try {
@@ -24,17 +54,17 @@ export const sendSMS = async (to: string, otp: string) => {
       from: twilioPhoneNumber,
       to,
     });
-    return true;
+    return { success: true };
   } catch (error) {
     console.error('Error sending SMS:', error);
-    return false;
+    return { success: false };
   }
 };
 
 export const sendEmail = async (to: string, otp: string) => {
   if (!process.env.EMAIL_SERVER_HOST || process.env.EMAIL_SERVER_HOST === 'smtp.example.com') {
-    console.warn('Email credentials missing or mocked. Simulating Email OTP:', otp);
-    return true;
+    console.error('Email credentials missing or mocked. Email failed.');
+    return false;
   }
   
   try {
