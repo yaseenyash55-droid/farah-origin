@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
+import { useAuth } from "@/context/AuthContext";
 
 interface PaymentFormProps {
   amount: number;
@@ -12,6 +13,7 @@ interface PaymentFormProps {
 export default function PaymentForm({ amount, onSuccess }: PaymentFormProps) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { getApiUrl, getAuthHeaders } = useAuth();
 
   const handlePayment = async () => {
     setLoading(true);
@@ -22,9 +24,9 @@ export default function PaymentForm({ amount, onSuccess }: PaymentFormProps) {
         const internalOrderId = `FO-${Math.floor(100000 + Math.random() * 900000)}`;
         
         // Save to Supabase using new API
-        await fetch("/api/orders", {
+        await fetch(getApiUrl("/api/orders"), {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: getAuthHeaders({ "Content-Type": "application/json" }),
           body: JSON.stringify({
             orderNumber: internalOrderId,
             orderDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
@@ -43,9 +45,9 @@ export default function PaymentForm({ amount, onSuccess }: PaymentFormProps) {
       }
 
       // 1. Create order on our backend (which uses Razorpay)
-      const res = await fetch("https://farah-origin.vercel.app/api/checkout/create-order", {
+      const res = await fetch(getApiUrl("/api/checkout/create-order"), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({ amount }),
       });
       
@@ -71,9 +73,9 @@ export default function PaymentForm({ amount, onSuccess }: PaymentFormProps) {
           const internalOrderId = `FO-${Math.floor(100000 + Math.random() * 900000)}`;
           
           // Save to Supabase using new API
-          await fetch("/api/orders", {
+          await fetch(getApiUrl("/api/orders"), {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: getAuthHeaders({ "Content-Type": "application/json" }),
             body: JSON.stringify({
               orderNumber: internalOrderId,
               orderDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),

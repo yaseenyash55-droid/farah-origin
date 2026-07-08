@@ -22,7 +22,7 @@ import {
 
 export default function CheckoutPage() {
   const { items: cartItems, clearCart } = useCart();
-  const { user, isLoggedIn, login } = useAuth();
+  const { user, isLoggedIn, login, getApiUrl, getAuthHeaders } = useAuth();
   const router = useRouter();
 
   // If cart is empty, redirect back to cart page (but wait for client mounting)
@@ -153,9 +153,9 @@ export default function CheckoutPage() {
     setResendTimer(30);
 
     // Send OTP to user's real email/phone via API
-    fetch("https://farah-origin.vercel.app/api/send-otp", {
+    fetch(getApiUrl("/api/send-otp"), {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: getAuthHeaders({ "Content-Type": "application/json" }),
       body: JSON.stringify({
         name: loginForm.name,
         email: loginForm.email,
@@ -170,7 +170,7 @@ export default function CheckoutPage() {
         setGeneratedOtp(data.otp);
         console.log("Checkout OTP generated on server:", data.otp);
         if (data.simulated) {
-           setTimeout(() => alert(`[TEST MODE] Your simulated OTP is: ${data.otp}`), 500);
+           console.log(`[TEST MODE] Your simulated OTP is: ${data.otp}`);
         }
       }
     })
@@ -189,9 +189,9 @@ export default function CheckoutPage() {
     setUserOtpInput("");
     setLoginErrors({});
 
-    fetch("https://farah-origin.vercel.app/api/send-otp", {
+    fetch(getApiUrl("/api/send-otp"), {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: getAuthHeaders({ "Content-Type": "application/json" }),
       body: JSON.stringify({
         name: loginForm.name,
         email: loginForm.email,
@@ -206,7 +206,7 @@ export default function CheckoutPage() {
         setGeneratedOtp(data.otp);
         console.log("Checkout OTP resent & generated on server:", data.otp);
         if (data.simulated) {
-           setTimeout(() => alert(`[TEST MODE] Your simulated OTP is: ${data.otp}`), 500);
+           console.log(`[TEST MODE] Your simulated OTP is: ${data.otp}`);
         }
       }
     })
@@ -303,7 +303,6 @@ export default function CheckoutPage() {
     return Object.keys(errors).length === 0;
   };
 
-  // Trigger Native Local Notifications or Browser fallback
   const triggerNotification = async (orderNum) => {
     try {
       // Dynamic import to avoid SSR errors
@@ -324,24 +323,29 @@ export default function CheckoutPage() {
       });
       console.log("Capacitor local notification scheduled successfully.");
     } catch (e) {
-      console.warn("Capacitor local notifications not available. Using browser fallback API.", e);
-      // Fallback: standard web notification
-      if (typeof window !== "undefined" && "Notification" in window) {
-        if (Notification.permission === "granted") {
-          new Notification("Order Placed Successfully! 🧶", {
-            body: `Your order ${orderNum} has been received. Track it in your account!`,
-            icon: "/icon-192x192.png"
-          });
-        } else if (Notification.permission !== "denied") {
-          Notification.requestPermission().then(permission => {
-            if (permission === "granted") {
-              new Notification("Order Placed Successfully! 🧶", {
-                body: `Your order ${orderNum} has been received. Track it in your account!`,
-                icon: "/icon-192x192.png"
-              });
-            }
-          });
+      console.warn("Capacitor local notifications not available. Using browser fallback API.");
+      try {
+        // Fallback: standard web notification
+        if (typeof window !== "undefined" && "Notification" in window) {
+          if (Notification.permission === "granted") {
+            new Notification("Order Placed Successfully! 🧶", {
+              body: `Your order ${orderNum} has been received. Track it in your account!`,
+              icon: "/icon-192x192.png"
+            });
+          } else if (Notification.permission !== "denied") {
+            Notification.requestPermission().then(permission => {
+              if (permission === "granted") {
+                new Notification("Order Placed Successfully! 🧶", {
+                  body: `Your order ${orderNum} has been received. Track it in your account!`,
+                  icon: "/icon-192x192.png"
+                });
+              }
+            }).catch(err => console.warn("Notification permission request failed", err));
+          }
         }
+      } catch (innerError) {
+        // Many mobile browsers (like Chrome Android) do not allow new Notification() without a Service Worker.
+        console.warn("Web Notification fallback failed (likely requires ServiceWorker):", innerError);
       }
     }
   };
@@ -403,14 +407,15 @@ export default function CheckoutPage() {
 
     // 3. Save order data to Supabase and trigger notification
     try {
-      const res = await fetch("/api/orders", {
+      const res = await fetch(getApiUrl("/api/orders"), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify(orderData)
       });
       
       if (!res.ok) {
-        throw new Error("Failed to save order to database");
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to save order to database");
       }
       
       await triggerNotification(orderNumber);
@@ -420,7 +425,7 @@ export default function CheckoutPage() {
       router.push(`/thank-you?orderId=${orderNumber}`);
     } catch (error) {
       console.error("Order placement error:", error);
-      alert("There was an error placing your order. Please try again.");
+      alert(error.message || "There was an error placing your order. Please try again.");
     }
   };
 

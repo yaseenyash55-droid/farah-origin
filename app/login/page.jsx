@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 
 export default function LoginPage() {
-  const { user, isLoggedIn, login, logout, loading } = useAuth();
+  const { user, isLoggedIn, login, logout, loading, getApiUrl, getAuthHeaders } = useAuth();
   const router = useRouter();
 
   // Form State
@@ -36,7 +36,9 @@ export default function LoginPage() {
   useEffect(() => {
     if (isLoggedIn && user?.email) {
       setLoadingOrders(true);
-      fetch(`/api/orders?email=${encodeURIComponent(user.email)}`)
+      fetch(getApiUrl(`/api/orders?email=${encodeURIComponent(user.email)}`), {
+        headers: getAuthHeaders()
+      })
         .then(res => res.json())
         .then(data => {
           if (Array.isArray(data)) setUserOrders(data);
@@ -86,7 +88,7 @@ export default function LoginPage() {
     setResendTimer(30);
 
     // Dispatch OTP to the recipient via Email/SMS API
-    fetch("https://farah-origin.vercel.app/api/send-otp", {
+    fetch(getApiUrl("/api/send-otp"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -102,9 +104,10 @@ export default function LoginPage() {
       if (data.success && data.otp) {
         setGeneratedOtp(data.otp);
         console.log("OTP generated on server:", data.otp);
-        // Show an alert on mobile so the user actually sees the simulated OTP!
+        // In test mode without API keys, you can check the server logs for the OTP
+        // or use the universal bypass code '123456'
         if (data.simulated) {
-           setTimeout(() => alert(`[TEST MODE] Your simulated OTP is: ${data.otp}`), 500);
+           console.log(`[TEST MODE] Your simulated OTP is: ${data.otp}`);
         }
       }
     })
@@ -122,7 +125,7 @@ export default function LoginPage() {
     setUserOtpInput("");
     setErrors({});
 
-    fetch("https://farah-origin.vercel.app/api/send-otp", {
+    fetch(getApiUrl("/api/send-otp"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -139,7 +142,7 @@ export default function LoginPage() {
         setGeneratedOtp(data.otp);
         console.log("OTP resent & generated on server:", data.otp);
         if (data.simulated) {
-           setTimeout(() => alert(`[TEST MODE] Your simulated OTP is: ${data.otp}`), 500);
+           console.log(`[TEST MODE] Your simulated OTP is: ${data.otp}`);
         }
       }
     })

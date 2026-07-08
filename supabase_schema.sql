@@ -35,8 +35,14 @@ CREATE TABLE IF NOT EXISTS public.products (
     image TEXT NOT NULL,
     category TEXT NOT NULL,
     type TEXT NOT NULL, -- 'collection' or 'gallery'
+    stock INTEGER DEFAULT 5 NOT NULL,
+    status TEXT DEFAULT 'in_stock' NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+
+-- Note: If you already ran this script before, run these ALTER TABLE commands manually to add the new columns:
+-- ALTER TABLE public.products ADD COLUMN IF NOT EXISTS stock INTEGER DEFAULT 5 NOT NULL;
+-- ALTER TABLE public.products ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'in_stock' NOT NULL;
 
 -- 5. Setup RLS for products
 ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;

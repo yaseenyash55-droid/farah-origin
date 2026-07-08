@@ -25,7 +25,28 @@ function main() {
 
   // 1. Build static Next.js assets
   console.log("\n[Step 1/4] Compiling Next.js Web App...");
-  if (!runCommand("npm run build:static", rootDir)) {
+  const apiDir = path.join(rootDir, "app", "api");
+  const tempApiDir = path.join(rootDir, "app", "_api_temp_hidden");
+  
+  // Hide API directory so Next.js static export doesn't fail on dynamic routes
+  if (fs.existsSync(apiDir)) {
+    console.log("Temporarily hiding /api routes for static export...");
+    fs.renameSync(apiDir, tempApiDir);
+    const nextDir = path.join(rootDir, ".next");
+    if (fs.existsSync(nextDir)) {
+      fs.rmSync(nextDir, { recursive: true, force: true });
+    }
+  }
+
+  const buildSuccess = runCommand("npm run build:static", rootDir);
+
+  // Restore API directory
+  if (fs.existsSync(tempApiDir)) {
+    console.log("Restoring /api routes...");
+    fs.renameSync(tempApiDir, apiDir);
+  }
+
+  if (!buildSuccess) {
     console.error("Next.js build failed. Aborting.");
     process.exit(1);
   }

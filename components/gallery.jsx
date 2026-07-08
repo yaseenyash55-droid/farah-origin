@@ -51,33 +51,60 @@ export default function Gallery({ showTitle = true }) {
           ))}
         </div>
 
-        {/* Portfolio Dynamic Grid Layout */}
         <div className="grid-gallery">
-          {filteredItems.map((item) => (
-            <div key={item.id} className="group relative bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl overflow-hidden transition-all duration-300 hover:transform hover:-translate-y-1">
-              <div className="aspect-square w-full overflow-hidden relative bg-[#1c1a1a]">
-                <img 
-                  src={item.image} 
-                  alt={item.title} 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 cursor-pointer"
-                  onClick={() => setActiveImage(item)}
-                />
-              </div>
-              <div className="p-5 flex justify-between items-start">
-                <div>
-                  <h3 className="font-medium text-base text-[var(--foreground)]">{item.title}</h3>
-                  <p className="text-xs text-gray-400 mt-1">{item.description}</p>
+          {filteredItems.map((item) => {
+            const isSoldOut = item.stock <= 0 || item.status === 'sold_out';
+            const isLowStock = !isSoldOut && item.stock > 0 && item.stock < 3;
+
+            return (
+              <div key={item.id} className={`group relative bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl overflow-hidden transition-all duration-300 ${isSoldOut ? 'opacity-75' : 'hover:transform hover:-translate-y-1'}`}>
+                <div className="aspect-square w-full overflow-hidden relative bg-[#1c1a1a]">
+                  <img 
+                    src={item.image} 
+                    alt={item.title} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 cursor-pointer"
+                    onClick={() => setActiveImage(item)}
+                  />
+
+                  {/* Sold Out Overlay */}
+                  {isSoldOut && (
+                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center pointer-events-none">
+                      <span className="bg-red-600 text-white font-bold tracking-widest uppercase px-6 py-2 rounded-lg transform -rotate-12 border-2 border-white shadow-xl">
+                        Sold Out
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Low Stock Badge */}
+                  {isLowStock && (
+                    <div className="absolute top-4 left-4 bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg pointer-events-none">
+                      Only {item.stock} left!
+                    </div>
+                  )}
                 </div>
-                <button 
-                  onClick={() => openWhatsAppOrder(item.title)}
-                  className="p-2 text-[var(--accent)] border border-[var(--border)] rounded-xl hover:bg-[var(--accent)] hover:text-[#0d0c0c] transition-all"
-                  aria-label="Order via WhatsApp"
-                >
-                  <ExternalLink size={16} />
-                </button>
+                <div className="p-5 flex justify-between items-start">
+                  <div>
+                    <h3 className="font-medium text-base text-[var(--foreground)]">{item.title}</h3>
+                    <p className="text-xs text-gray-400 mt-1">{item.description}</p>
+                  </div>
+                  <button 
+                    onClick={() => {
+                      if (!isSoldOut) openWhatsAppOrder(item.title);
+                    }}
+                    disabled={isSoldOut}
+                    className={`p-2 border rounded-xl transition-all ${
+                      isSoldOut 
+                        ? 'text-gray-500 border-gray-600 cursor-not-allowed opacity-50' 
+                        : 'text-[var(--accent)] border-[var(--border)] hover:bg-[var(--accent)] hover:text-[#0d0c0c]'
+                    }`}
+                    aria-label="Order via WhatsApp"
+                  >
+                    <ExternalLink size={16} />
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Lightbox Overlay Module */}

@@ -19,6 +19,7 @@ function TrackOrderContent() {
   const orderId = searchParams.get("orderId") || "Unknown";
   
   const [status, setStatus] = useState<OrderStatus>('placed');
+  const [orderItems, setOrderItems] = useState<any[]>([]);
 
   useEffect(() => {
     if (orderId === "Unknown") return;
@@ -27,8 +28,13 @@ function TrackOrderContent() {
       fetch(`/api/orders?id=${orderId}`)
         .then(res => res.json())
         .then(data => {
-          if (data && data.status && data.status !== status) {
-            setStatus(data.status as OrderStatus);
+          if (data) {
+            if (data.status && data.status !== status) {
+              setStatus(data.status as OrderStatus);
+            }
+            if (data.items && data.items.length > 0 && orderItems.length === 0) {
+              setOrderItems(data.items);
+            }
           }
         })
         .catch(e => console.error("Error fetching order status:", e));
@@ -85,11 +91,32 @@ function TrackOrderContent() {
         </div>
       </div>
 
-      <div className="bg-pink-50 rounded-2xl p-6 text-center">
+      <div className="bg-pink-50 rounded-2xl p-6 text-center mb-10">
         <h3 className="text-lg font-bold text-gray-900 mb-2">Need Help?</h3>
         <p className="text-gray-600 mb-4">Contact us via WhatsApp for live updates</p>
         <p className="text-pink-700 font-bold">8438440625</p>
       </div>
+
+      {/* Order Items */}
+      {orderItems.length > 0 && (
+        <div className="mt-8 border-t border-gray-100 pt-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-6">Items in this Order</h3>
+          <div className="space-y-4">
+            {orderItems.map((item: any, i: number) => (
+              <div key={i} className="flex items-center gap-4 bg-gray-50 p-4 rounded-xl">
+                <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded-lg border border-gray-200" />
+                <div className="flex-grow">
+                  <h4 className="font-semibold text-gray-900">{item.name}</h4>
+                  <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
+                </div>
+                <div className="font-bold text-gray-900">
+                  ₹{(item.price * item.quantity).toFixed(2)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
 
 

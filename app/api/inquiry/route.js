@@ -1,24 +1,31 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '../../../lib/supabase';
+import { z } from 'zod';
+
+const inquirySchema = z.object({
+  fullName: z.string().min(2),
+  email: z.string().email(),
+  phone: z.string().optional(),
+  interest: z.string().min(2),
+  message: z.string().min(5),
+});
 
 export async function POST(request) {
   try {
     const data = await request.json();
 
-    // Basic validation
-    if (!data.fullName || !data.email || !data.interest || !data.message) {
-      return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
-    }
+    // Validate request using Zod
+    const validatedData = inquirySchema.parse(data);
 
     const { data: insertedData, error } = await supabase
       .from('inquiries')
       .insert([
         {
-          full_name: data.fullName,
-          email: data.email,
-          phone: data.phone || null,
-          interest: data.interest,
-          message: data.message
+          full_name: validatedData.fullName,
+          email: validatedData.email,
+          phone: validatedData.phone || null,
+          interest: validatedData.interest,
+          message: validatedData.message
         }
       ]);
 
@@ -33,6 +40,9 @@ export async function POST(request) {
 
   } catch (error) {
     console.error('Error processing inquiry:', error);
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ message: 'Validation failed', details: error.issues }, { status: 400 });
+    }
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 }

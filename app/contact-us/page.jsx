@@ -31,7 +31,7 @@ const ContactUsPage = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold">Email</h3>
-                  <a href="mailto:hello@farahorigin.com" className="text-muted-foreground hover:text-primary transition">hello@farahorigin.com</a>
+                  <a href="mailto:farahorigin.shop@gmail.com" className="text-muted-foreground hover:text-primary transition">farahorigin.shop@gmail.com</a>
                 </div>
               </div>
               <div className="flex items-center gap-4">

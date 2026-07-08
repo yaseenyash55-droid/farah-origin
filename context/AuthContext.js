@@ -33,11 +33,15 @@ export const AuthProvider = ({ children }) => {
     
     // Save to database
     try {
-      await fetch('/api/auth/register', {
+      const response = await fetch('https://farah-origin.vercel.app/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData)
       });
+      const data = await response.json();
+      if (data.token && typeof window !== "undefined") {
+        localStorage.setItem("authToken", data.token);
+      }
     } catch (e) {
       console.error("Failed to register user to DB", e);
     }
@@ -47,7 +51,24 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     if (typeof window !== "undefined") {
       localStorage.removeItem("currentUser");
+      localStorage.removeItem("authToken");
     }
+  };
+
+  const getApiUrl = (path) => {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://farah-origin.vercel.app";
+    return `${baseUrl}${path}`;
+  };
+
+  const getAuthHeaders = (extraHeaders = {}) => {
+    const headers = { ...extraHeaders };
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("authToken");
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+    }
+    return headers;
   };
 
   const value = {
@@ -55,7 +76,9 @@ export const AuthProvider = ({ children }) => {
     loading,
     login,
     logout,
-    isLoggedIn: !!user
+    isLoggedIn: !!user,
+    getApiUrl,
+    getAuthHeaders
   };
 
   return (

@@ -14,9 +14,11 @@ export default function InventoryAdmin() {
   const [loading, setLoading] = useState(true);
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
   
   const [formData, setFormData] = useState({
-    id: '', title: '', description: '', price: 0, image: '', category: 'crochet', type: 'collection'
+    id: '', title: '', description: '', price: 0, image: '', category: 'crochet', type: 'collection', stock: 5, status: 'in_stock'
   });
 
   useEffect(() => {
@@ -57,14 +59,42 @@ export default function InventoryAdmin() {
 
   const handleSave = async (e) => {
     e.preventDefault();
-    const finalData = { ...formData, id: formData.id || `item_${Date.now()}` };
+    setUploading(true);
+    let finalImageUrl = formData.image;
+
+    if (imageFile) {
+      const fileExt = imageFile.name.split('.').pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('products')
+        .upload(filePath, imageFile);
+
+      if (uploadError) {
+        alert("Error uploading image: " + uploadError.message);
+        setUploading(false);
+        return;
+      }
+
+      const { data: publicUrlData } = supabase.storage
+        .from('products')
+        .getPublicUrl(filePath);
+
+      finalImageUrl = publicUrlData.publicUrl;
+    }
+
+    const finalData = { ...formData, id: formData.id || `item_${Date.now()}`, image: finalImageUrl };
     const { error } = await supabase.from('products').upsert(finalData);
+    
+    setUploading(false);
     if (error) {
       alert("Error saving: " + error.message);
     } else {
       setIsAdding(false);
       setEditingId(null);
-      setFormData({ id: '', title: '', description: '', price: 0, image: '', category: 'crochet', type: 'collection' });
+      setImageFile(null);
+      setFormData({ id: '', title: '', description: '', price: 0, image: '', category: 'crochet', type: 'collection', stock: 5, status: 'in_stock' });
       fetchProducts();
     }
   };
@@ -127,7 +157,7 @@ export default function InventoryAdmin() {
           </div>
           <div className="flex gap-2">
             <button 
-              onClick={() => { setIsAdding(true); setEditingId(null); setFormData({ id: '', title: '', description: '', price: 0, image: '', category: 'crochet', type: 'collection' }); }}
+              onClick={() => { setIsAdding(true); setEditingId(null); setFormData({ id: '', title: '', description: '', price: 0, image: '', category: 'crochet', type: 'collection', stock: 5, status: 'in_stock' }); }}
               className="bg-primary text-primary-foreground px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-primary/90"
             >
               <Plus size={20} /> Add New Item
@@ -158,8 +188,13 @@ export default function InventoryAdmin() {
                 <textarea required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full bg-background border border-border rounded-lg p-2 h-20" />
               </div>
               <div>
+                <label className="block text-sm font-medium mb-1">Upload Image (Optional)</label>
+                <input type="file" accept="image/*" onChange={e => setImageFile(e.target.files[0])} className="w-full bg-background border border-border rounded-lg p-1.5" />
+                <p className="text-xs text-muted-foreground mt-1">Or paste a URL below</p>
+              </div>
+              <div>
                 <label className="block text-sm font-medium mb-1">Image URL</label>
-                <input required type="text" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} className="w-full bg-background border border-border rounded-lg p-2" />
+                <input required={!imageFile && !formData.image} type="text" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} className="w-full bg-background border border-border rounded-lg p-2" placeholder="Leave empty if uploading" />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Category</label>
@@ -178,11 +213,22 @@ export default function InventoryAdmin() {
                   <option value="gallery">Gallery (Portfolio Item only)</option>
                 </select>
               </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Stock Quantity</label>
+                <input required type="number" min="0" value={formData.stock} onChange={e => setFormData({...formData, stock: parseInt(e.target.value)})} className="w-full bg-background border border-border rounded-lg p-2" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Status</label>
+                <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})} className="w-full bg-background border border-border rounded-lg p-2">
+                  <option value="in_stock">In Stock</option>
+                  <option value="sold_out">Sold Out</option>
+                </select>
+              </div>
               
               <div className="md:col-span-2 flex justify-end gap-2 mt-4">
-                <button type="button" onClick={() => setIsAdding(false)} className="px-4 py-2 border border-border rounded-lg hover:bg-muted">Cancel</button>
-                <button type="submit" className="bg-primary text-primary-foreground px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-primary/90">
-                  <Save size={18} /> Save Item
+                <button type="button" onClick={() => { setIsAdding(false); setImageFile(null); }} className="px-4 py-2 border border-border rounded-lg hover:bg-muted">Cancel</button>
+                <button type="submit" disabled={uploading} className="bg-primary text-primary-foreground px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-primary/90 disabled:opacity-50">
+                  <Save size={18} /> {uploading ? 'Saving...' : 'Save Item'}
                 </button>
               </div>
             </form>
@@ -198,19 +244,24 @@ export default function InventoryAdmin() {
                   <th className="p-4">Title</th>
                   <th className="p-4">Category</th>
                   <th className="p-4">Type</th>
+                  <th className="p-4">Stock</th>
                   <th className="p-4">Price</th>
                   <th className="p-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan="6" className="p-8 text-center text-muted-foreground">Loading inventory...</td></tr>
+                  <tr><td colSpan="7" className="p-8 text-center text-muted-foreground">Loading inventory...</td></tr>
                 ) : products.map((product) => (
-                  <tr key={product.id} className="border-b border-border/50 hover:bg-muted/20">
+                  <tr key={product.id} className={`border-b border-border/50 hover:bg-muted/20 ${product.stock < 3 ? 'bg-orange-500/10 dark:bg-orange-900/20' : ''}`}>
                     <td className="p-4"><img src={product.image} className="w-12 h-12 rounded object-cover" alt="img" /></td>
-                    <td className="p-4 font-medium truncate max-w-[200px]">{product.title}</td>
+                    <td className="p-4 font-medium truncate max-w-[200px]">
+                      {product.title}
+                      {product.stock < 3 && <span className="ml-2 text-xs bg-orange-500/20 text-orange-600 px-2 py-0.5 rounded-full font-bold">Low Stock</span>}
+                    </td>
                     <td className="p-4 uppercase text-xs tracking-wider">{product.category}</td>
                     <td className="p-4 uppercase text-xs tracking-wider">{product.type}</td>
+                    <td className="p-4 font-bold">{product.stock}</td>
                     <td className="p-4 text-primary font-bold">₹{product.price}</td>
                     <td className="p-4 text-right">
                       <button onClick={() => startEdit(product)} className="p-2 text-blue-400 hover:bg-blue-400/10 rounded mr-2"><Edit2 size={18} /></button>
@@ -219,7 +270,7 @@ export default function InventoryAdmin() {
                   </tr>
                 ))}
                 {products.length === 0 && !loading && (
-                  <tr><td colSpan="6" className="p-8 text-center text-muted-foreground">No items found. Add one above!</td></tr>
+                  <tr><td colSpan="7" className="p-8 text-center text-muted-foreground">No items found. Add one above!</td></tr>
                 )}
               </tbody>
             </table>
